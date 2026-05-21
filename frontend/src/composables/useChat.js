@@ -24,6 +24,7 @@ export function useChat(onResult) {
         role: 'ai',
         text: data.reply,
         chips: data.chips || [],
+        is_fallback: data.is_fallback || false,
       })
       if (onResult) onResult(data)
     } catch (e) {
