@@ -68,10 +68,11 @@ def _load_geojson_polygons(path: Path) -> list[dict]:
 def load_all_datasets(data_dir: Path) -> dict:
     """Carica tutti i dataset in memoria. Chiamato una volta sola all'avvio."""
     return {
-        "bike_sharing":  _load_geojson_points(data_dir / "bike_sharing.geojson"),
-        "car_sharing":   _load_geojson_points(data_dir / "car_sharing.geojson"),
-        "stazioni":      _load_geojson_points(data_dir / "stazioni.geojson"),
-        "taxi":          _load_taxi(data_dir / "taxi.geojson"),
-        "parcheggi":     _load_geojson_polygons(data_dir / "zone_parcheggio.geojson"),
-        "patti":         _load_geojson_points(data_dir / "patti.geojson"),
+        "bike_sharing":      _load_geojson_points(data_dir / "bike_sharing.geojson"),
+        "car_sharing":       _load_geojson_points(data_dir / "car_sharing.geojson"),
+        "stazioni":          _load_geojson_points(data_dir / "stazioni.geojson"),
+        "taxi":              _load_taxi(data_dir / "taxi.geojson"),
+        "parcheggi":         _load_geojson_polygons(data_dir / "zone_parcheggio.geojson"),
+        "patti":             _load_geojson_points(data_dir / "patti.geojson"),
+        "luoghi_interesse":  _load_geojson_points(data_dir / "luoghi_interesse.geojson"),
     }

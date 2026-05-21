@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException, Request
 
 router = APIRouter()
 
-VALID_CATEGORIES = {"bike_sharing", "car_sharing", "stazioni", "taxi", "parcheggi", "patti"}
+VALID_CATEGORIES = {"bike_sharing", "car_sharing", "stazioni", "taxi", "parcheggi", "patti", "luoghi_interesse"}
 
 
 @router.get("/poi/{category}")

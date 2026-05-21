@@ -1,0 +1,203 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [11.0393, 45.8897] },
+      "properties": {
+        "nome": "MART",
+        "nome_completo": "Museo di Arte Moderna e Contemporanea di Trento e Rovereto",
+        "categoria": "museo",
+        "citta": "Rovereto",
+        "descrizione": "Uno dei più importanti musei d'arte moderna in Italia, progettato da Mario Botta"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [11.0415, 45.8921] },
+      "properties": {
+        "nome": "Castello di Rovereto",
+        "nome_completo": "Castello di Rovereto — Museo Storico Italiano della Guerra",
+        "categoria": "museo",
+        "citta": "Rovereto",
+        "descrizione": "Castello medievale che ospita il Museo Storico Italiano della Guerra"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [11.0361, 45.8940] },
+      "properties": {
+        "nome": "Campana dei Caduti",
+        "nome_completo": "Campana dei Caduti — Maria Dolens",
+        "categoria": "monumento",
+        "citta": "Rovereto",
+        "descrizione": "La campana della pace più grande al mondo, fusa con bronzi di cannoni di 19 nazioni"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [11.0401, 45.8893] },
+      "properties": {
+        "nome": "Teatro Zandonai",
+        "nome_completo": "Teatro Riccardo Zandonai",
+        "categoria": "teatro",
+        "citta": "Rovereto",
+        "descrizione": "Teatro storico di Rovereto, sede di opera, prosa e concerti"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [11.0437, 45.8904] },
+      "properties": {
+        "nome": "Piazza Rosmini",
+        "nome_completo": "Piazza Antonio Rosmini",
+        "categoria": "piazza",
+        "citta": "Rovereto",
+        "descrizione": "Piazza principale di Rovereto, dedicata al filosofo Antonio Rosmini"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [11.0416, 45.8898] },
+      "properties": {
+        "nome": "Piazza del Podestà",
+        "nome_completo": "Piazza del Podestà",
+        "categoria": "piazza",
+        "citta": "Rovereto",
+        "descrizione": "Piazza storica nel cuore del centro di Rovereto"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [11.0413, 45.8900] },
+      "properties": {
+        "nome": "Casa Natale di Rosmini",
+        "nome_completo": "Casa Natale di Antonio Rosmini",
+        "categoria": "museo",
+        "citta": "Rovereto",
+        "descrizione": "Dimora natale del filosofo Antonio Rosmini, oggi museo"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [11.0388, 45.8872] },
+      "properties": {
+        "nome": "Parco Leno",
+        "nome_completo": "Parco Fluviale del Leno",
+        "categoria": "parco",
+        "citta": "Rovereto",
+        "descrizione": "Area verde lungo il torrente Leno nel centro di Rovereto"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [11.1261, 46.0725] },
+      "properties": {
+        "nome": "Castello del Buonconsiglio",
+        "nome_completo": "Castello del Buonconsiglio — Monumenti e Collezioni Provinciali",
+        "categoria": "museo",
+        "citta": "Trento",
+        "descrizione": "Il più importante castello del Trentino, già residenza dei Principi Vescovi"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [11.1164, 46.0613] },
+      "properties": {
+        "nome": "MUSE",
+        "nome_completo": "MUSE — Museo delle Scienze di Trento",
+        "categoria": "museo",
+        "citta": "Trento",
+        "descrizione": "Museo delle scienze naturali progettato da Renzo Piano nel nuovo quartiere Le Albere"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [11.1213, 46.0668] },
+      "properties": {
+        "nome": "Piazza Duomo",
+        "nome_completo": "Piazza Duomo — Cattedrale di San Vigilio",
+        "categoria": "piazza",
+        "citta": "Trento",
+        "descrizione": "Cuore del centro storico di Trento con la Cattedrale di San Vigilio e la Fontana del Nettuno"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [11.1216, 46.0669] },
+      "properties": {
+        "nome": "Museo Diocesano Tridentino",
+        "nome_completo": "Museo Diocesano Tridentino",
+        "categoria": "museo",
+        "citta": "Trento",
+        "descrizione": "Ricca collezione di arte sacra medievale e rinascimentale, affacciata su Piazza Duomo"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [11.1218, 46.0675] },
+      "properties": {
+        "nome": "Teatro Sociale",
+        "nome_completo": "Teatro Sociale di Trento",
+        "categoria": "teatro",
+        "citta": "Trento",
+        "descrizione": "Teatro storico neoclassico nel centro di Trento, sede della Stagione Lirica"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [11.1213, 46.0682] },
+      "properties": {
+        "nome": "Piazza Dante",
+        "nome_completo": "Piazza Dante",
+        "categoria": "piazza",
+        "citta": "Trento",
+        "descrizione": "Piazza con la statua di Dante Alighieri, collegata alla stazione ferroviaria"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [11.1196, 46.0690] },
+      "properties": {
+        "nome": "Torre Vanga",
+        "nome_completo": "Torre Vanga",
+        "categoria": "monumento",
+        "citta": "Trento",
+        "descrizione": "Torre medievale del XIII secolo, uno dei simboli di Trento"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [11.1171, 46.0614] },
+      "properties": {
+        "nome": "Parco delle Albere",
+        "nome_completo": "Parco delle Albere",
+        "categoria": "parco",
+        "citta": "Trento",
+        "descrizione": "Grande parco urbano nel nuovo quartiere Le Albere, accanto al MUSE"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [11.1299, 46.0559] },
+      "properties": {
+        "nome": "Parco di Gocciadoro",
+        "nome_completo": "Parco di Gocciadoro",
+        "categoria": "parco",
+        "citta": "Trento",
+        "descrizione": "Parco naturale alle porte di Trento con boschi e sentieri"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [11.1218, 46.0679] },
+      "properties": {
+        "nome": "Palazzo Thun",
+        "nome_completo": "Palazzo Thun — Municipio di Trento",
+        "categoria": "monumento",
+        "citta": "Trento",
+        "descrizione": "Palazzo rinascimentale sede del Municipio di Trento"
+      }
+    }
+  ]
+}
