@@ -9,6 +9,9 @@ Usa open data del Comune + Gemini AI + OpenRouteService.
 > Usa il venv come descritto sotto.
 
 ```bash
+# 0. Installa dipendenze di sistema (Arch Linux)
+sudo pacman -S proj
+
 # 1. Crea il virtual environment Python (una volta sola)
 python3 -m venv .venv
 .venv/bin/pip install -r backend/requirements.txt
