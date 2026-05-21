@@ -10,6 +10,7 @@ load_dotenv()
 
 from geo.loader import load_all_datasets
 from routers.chat import router as chat_router
+from routers.poi import router as poi_router
 
 app = FastAPI(title="Ask Rovereto API")
 
@@ -44,3 +45,4 @@ if data_dir.exists():
     app.mount("/static", StaticFiles(directory=str(data_dir)), name="static")
 
 app.include_router(chat_router, prefix="/api")
+app.include_router(poi_router, prefix="/api")

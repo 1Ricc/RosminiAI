@@ -1,12 +1,12 @@
-import os
+import json
 from typing import Any
 
 import httpx
-import google.generativeai as genai
+import ollama
 from dotenv import load_dotenv
 
 from ai.prompt import SYSTEM_PROMPT, KNOWN_PLACES
-from ai.tools import GEMINI_TOOL
+from ai.tools import OLLAMA_TOOLS
 from geo.nearest import find_nearest
 from geo.routing import get_route, co2_saved_grams
 
@@ -39,21 +39,37 @@ async def execute_tool(
 
     if name == "geocode_location":
         place = args["place_name"].lower().strip()
+        lat, lon = None, None
         if place in KNOWN_PLACES:
             lat, lon = KNOWN_PLACES[place]
-            return {"lat": lat, "lon": lon, "found": True}
-        # Fallback Nominatim
-        async with httpx.AsyncClient(timeout=5.0) as client:
-            r = await client.get(
-                "https://nominatim.openstreetmap.org/search",
-                params={"q": f"{args['place_name']} Trento Italia", "format": "json", "limit": 1},
-                headers={"User-Agent": "AskRovereto/1.0"},
-            )
-            results = r.json()
-        if results:
-            lat, lon = float(results[0]["lat"]), float(results[0]["lon"])
-            return {"lat": lat, "lon": lon, "found": True}
-        return {"lat": None, "lon": None, "found": False, "error": "Luogo non trovato"}
+        else:
+            # Fallback Nominatim
+            async with httpx.AsyncClient(timeout=5.0) as client:
+                r = await client.get(
+                    "https://nominatim.openstreetmap.org/search",
+                    params={"q": f"{args['place_name']} Trento Italia", "format": "json", "limit": 1},
+                    headers={"User-Agent": "AskRovereto/1.0"},
+                )
+                results = r.json()
+            if results:
+                lat, lon = float(results[0]["lat"]), float(results[0]["lon"])
+
+        if lat is None:
+            return {"lat": None, "lon": None, "found": False, "error": "Luogo non trovato"}
+
+        # Prima geocodifica = origin, seconda = destination, ulteriori = waypoint
+        count = geo_state.get("_geocode_count", 0)
+        geo_state["_geocode_count"] = count + 1
+        marker_type = "origin" if count == 0 else "destination" if count == 1 else "waypoint"
+
+        geo_state.setdefault("markers", []).append({
+            "lat":        lat,
+            "lon":        lon,
+            "type":       marker_type,
+            "label":      args["place_name"],
+            "distance_m": None,
+        })
+        return {"lat": lat, "lon": lon, "found": True}
 
     if name == "find_nearest_poi":
         poi_type = args["poi_type"]
@@ -127,54 +143,113 @@ def build_chips(distance_m: int, duration_s: int, profile: str) -> list[dict]:
     return chips
 
 
+async def get_fallback_response(message: str = "") -> dict:
+    """Risposta demo durante cooldown Gemini. Sceglie il percorso in base al messaggio."""
+    msg_lower = message.lower()
+    is_muse = "muse" in msg_lower or "museo delle scienze" in msg_lower
+
+    if is_muse:
+        origin = KNOWN_PLACES["stazione fs"]
+        destination = KNOWN_PLACES["muse"]
+        profile = "foot-walking"
+        origin_label = "Stazione FS Trento"
+        destination_label = "MUSE – Museo delle Scienze"
+        reply = (
+            "Ecco un percorso a piedi di esempio: Stazione FS Trento → MUSE.\n\n"
+            "1. Esci dalla Stazione Ferroviaria di Trento e dirigiti verso sud su Via Dogana.\n"
+            "2. Prosegui lungo Viale Verona.\n"
+            "3. Svolta a destra su Via Luigi Negrelli.\n"
+            "4. Arrivi al MUSE – Museo delle Scienze di Trento.\n\n"
+            "⚠️ Il servizio AI è temporaneamente in pausa (quota esaurita). "
+            "Questa è una risposta di esempio — riprova tra qualche minuto."
+        )
+        hardcoded_distance_m = 2000
+        hardcoded_duration_s = 1500
+    else:
+        origin = KNOWN_PLACES["stazione rovereto"]
+        destination = KNOWN_PLACES["mart"]
+        profile = "cycling-regular"
+        origin_label = "Stazione FS Rovereto"
+        destination_label = "MART"
+        reply = (
+            "Ecco un percorso ciclabile di esempio: Stazione FS Rovereto → MART.\n\n"
+            "1. Parti dalla Stazione Ferroviaria di Rovereto in bici.\n"
+            "2. Imbocca Corso Rosmini verso il centro.\n"
+            "3. Svolta su Corso Bettini.\n"
+            "4. Arrivi al MART – Museo di Arte Moderna e Contemporanea di Rovereto.\n\n"
+            "⚠️ Il servizio AI è temporaneamente in pausa (quota esaurita). "
+            "Questa è una risposta di esempio — riprova tra qualche minuto."
+        )
+        hardcoded_distance_m = 1200
+        hardcoded_duration_s = 360
+
+    markers = [
+        {"lat": origin[0],      "lon": origin[1],      "type": "origin",      "label": origin_label,      "distance_m": None},
+        {"lat": destination[0], "lon": destination[1], "type": "destination", "label": destination_label, "distance_m": None},
+    ]
+
+    try:
+        route_data = await get_route(origin, destination, profile)
+        return {
+            "reply":       reply,
+            "markers":     markers,
+            "route":       route_data["geojson"],
+            "chips":       build_chips(route_data["distance_m"], route_data["duration_s"], profile),
+            "is_fallback": True,
+        }
+    except Exception:
+        return {
+            "reply":       reply,
+            "markers":     markers,
+            "route":       None,
+            "chips":       build_chips(hardcoded_distance_m, hardcoded_duration_s, profile),
+            "is_fallback": True,
+        }
+
+
 async def run_agent(message: str, datasets: dict) -> dict:
     """
-    Esegue il loop Gemini function calling.
+    Esegue il loop Ollama function calling con gemma4.
     Restituisce { reply, markers, route, chips }.
     """
-    genai.configure(api_key=os.getenv("GEMINI_API_KEY", ""))
-
-    model = genai.GenerativeModel(
-        model_name="gemini-2.5-flash",
-        tools=[GEMINI_TOOL],
-        system_instruction=SYSTEM_PROMPT,
-    )
-
-    chat = model.start_chat()
-    response = chat.send_message(message)
+    client = ollama.AsyncClient()
+    messages = [
+        {"role": "system", "content": SYSTEM_PROMPT},
+        {"role": "user",   "content": message},
+    ]
     geo_state: dict = {"markers": []}
+    last_response = None
 
-    # Loop tool calling — max 5 iterazioni per sicurezza
-    for _ in range(5):
-        fn_calls = [
-            part.function_call
-            for part in response.parts
-            if hasattr(part, "function_call")
-            and part.function_call
-            and part.function_call.name
-        ]
-        if not fn_calls:
-            break
-
-        tool_responses = []
-        for fc in fn_calls:
-            result = await execute_tool(fc.name, dict(fc.args), datasets, geo_state)
-            tool_responses.append(
-                genai.protos.Part(
-                    function_response=genai.protos.FunctionResponse(
-                        name=fc.name,
-                        response={"result": result},
-                    )
-                )
+    print(f"[ollama] → '{message[:60]}…'")
+    try:
+        for i in range(5):
+            print(f"[ollama] iter {i+1} — attendo risposta…")
+            response = await client.chat(
+                model="gemma4",
+                messages=messages,
+                tools=OLLAMA_TOOLS,
             )
+            last_response = response
+            messages.append(response.message)
+            tool_calls = response.message.tool_calls or []
+            print(f"[ollama] iter {i+1} — tool_calls: {[t.function.name for t in tool_calls] or 'nessuno (risposta finale)'}")
 
-        response = chat.send_message(
-            genai.protos.Content(parts=tool_responses)
-        )
+            if not tool_calls:
+                break
 
-    reply = "".join(
-        part.text for part in response.parts if hasattr(part, "text") and part.text
-    )
+            for tool_call in response.message.tool_calls:
+                name = tool_call.function.name
+                args = dict(tool_call.function.arguments)
+                result = await execute_tool(name, args, datasets, geo_state)
+                messages.append({
+                    "role":    "tool",
+                    "content": json.dumps(result, ensure_ascii=False),
+                })
+
+    except Exception:
+        return await get_fallback_response(message)
+
+    reply = last_response.message.content or "" if last_response else ""
 
     chips = []
     if "distance_m" in geo_state and "duration_s" in geo_state:
@@ -185,8 +260,9 @@ async def run_agent(message: str, datasets: dict) -> dict:
         )
 
     return {
-        "reply":   reply,
-        "markers": geo_state.get("markers", []),
-        "route":   geo_state.get("route"),
-        "chips":   chips,
+        "reply":       reply,
+        "markers":     geo_state.get("markers", []),
+        "route":       geo_state.get("route"),
+        "chips":       chips,
+        "is_fallback": False,
     }

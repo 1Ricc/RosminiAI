@@ -1,0 +1,369 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          11.1193,
+          46.0707
+        ]
+      },
+      "properties": {
+        "nome": "stazione fs"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          11.120616,
+          46.073843
+        ]
+      },
+      "properties": {
+        "nome": "stazione ftm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          11.033973,
+          45.889015
+        ]
+      },
+      "properties": {
+        "nome": "stazione rovereto"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          11.045029,
+          45.893968
+        ]
+      },
+      "properties": {
+        "nome": "mart"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          11.121389,
+          46.067334
+        ]
+      },
+      "properties": {
+        "nome": "piazza duomo"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          11.12725,
+          46.070994
+        ]
+      },
+      "properties": {
+        "nome": "castello del buonconsiglio"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          11.127292,
+          46.062603
+        ]
+      },
+      "properties": {
+        "nome": "muse"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          11.113020,
+          46.071013
+        ]
+      },
+      "properties": {
+        "nome": "piedicastello"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          11.12394,
+          46.065126
+        ]
+      },
+      "properties": {
+        "nome": "piazza fiera"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          11.120533,
+          46.069604
+        ]
+      },
+      "properties": {
+        "nome": "via roma"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          11.1506,
+          46.0664
+        ]
+      },
+      "properties": {
+        "nome": "povo"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          11.145969,
+          46.048931
+        ]
+      },
+      "properties": {
+        "nome": "villazzano"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          11.111638,
+          46.108473
+        ]
+      },
+      "properties": {
+        "nome": "gardolo"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          11.128331,
+          46.006713
+        ]
+      },
+      "properties": {
+        "nome": "mattarello"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          11.127213,
+          46.021381
+        ]
+      },
+      "properties": {
+        "nome": "aeroporto"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          11.120291,
+          46.07161
+        ]
+      },
+      "properties": {
+        "nome": "piazza dante"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          11.121429,
+          46.069033
+        ]
+      },
+      "properties": {
+        "nome": "palazzo thun"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          11.046654,
+          5.886377
+        ]
+      },
+      "properties": {
+        "nome": "castello di rovereto"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          11.038838,
+          45.873971
+        ]
+      },
+      "properties": {
+        "nome": "campana dei caduti"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          11.043318,
+          45.893016
+        ]
+      },
+      "properties": {
+        "nome": "teatro zandonai"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          11.045678,
+          45.886345
+        ]
+      },
+      "properties": {
+        "nome": "piazza del podesta"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          11.042062,
+          45.890706
+        ]
+      },
+      "properties": {
+        "nome": "casa natale di rosmini"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          11.0388,
+          45.8872
+        ]
+      },
+      "properties": {
+        "nome": "parco leno"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          11.121861,
+          46.067497
+        ]
+      },
+      "properties": {
+        "nome": "museo diocesano tridentino"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          11.122995,
+          46.069343
+        ]
+      },
+      "properties": {
+        "nome": "teatro sociale"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          11.118503,
+          46.069745
+        ]
+      },
+      "properties": {
+        "nome": "torre vanga"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          11.114444,
+          46.060373
+        ]
+      },
+      "properties": {
+        "nome": "parco delle albere"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          11.13778,
+          46.05669
+        ]
+      },
+      "properties": {
+        "nome": "parco di gocciadoro"
+      }
+    }
+  ]
+}
