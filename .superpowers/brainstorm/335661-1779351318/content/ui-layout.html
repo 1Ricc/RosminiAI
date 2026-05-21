@@ -1,0 +1,265 @@
+<h2>Layout UI — Ask Rovereto</h2>
+<p class="subtitle">Scegli la struttura principale dell'interfaccia</p>
+
+<style>
+.layout-cards {
+  display: flex;
+  gap: 20px;
+  margin: 24px 0;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.layout-card {
+  border: 2px solid #1e293b;
+  border-radius: 12px;
+  padding: 16px;
+  width: 280px;
+  cursor: pointer;
+  transition: border-color 0.2s, transform 0.1s;
+  background: #0f1629;
+}
+.layout-card:hover { border-color: #334155; transform: translateY(-2px); }
+.layout-card.selected { border-color: #60a5fa; background: #0f1f3d; }
+.layout-card h3 { margin: 0 0 4px; font-size: 15px; color: #f1f5f9; }
+.layout-card .tag { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: #64748b; margin-bottom: 12px; }
+.layout-card p { font-size: 12px; color: #94a3b8; margin: 8px 0 0; line-height: 1.5; }
+
+/* Mockup screens */
+.screen {
+  width: 100%;
+  height: 160px;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #1e293b;
+  display: flex;
+  font-size: 9px;
+  font-family: monospace;
+}
+
+/* Layout A: sidebar chat + map */
+.screen-a { flex-direction: row; }
+.screen-a .chat-panel {
+  width: 35%;
+  background: #0a0f1e;
+  border-right: 1px solid #1e293b;
+  display: flex;
+  flex-direction: column;
+  padding: 6px;
+  gap: 4px;
+}
+.screen-a .map-panel {
+  flex: 1;
+  background: #1a2744;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Layout B: full map + floating chat */
+.screen-b { flex-direction: column; position: relative; }
+.screen-b .map-bg {
+  position: absolute;
+  inset: 0;
+  background: #1a2744;
+}
+.screen-b .float-panel {
+  position: absolute;
+  bottom: 8px;
+  left: 8px;
+  right: 8px;
+  background: rgba(10, 15, 30, 0.92);
+  border: 1px solid #1e293b;
+  border-radius: 8px;
+  padding: 6px 8px;
+  display: flex;
+  gap: 6px;
+  align-items: flex-end;
+  backdrop-filter: blur(8px);
+}
+
+/* Layout C: top chat + map below */
+.screen-c { flex-direction: column; }
+.screen-c .top-bar {
+  background: #0a0f1e;
+  border-bottom: 1px solid #1e293b;
+  padding: 6px 8px;
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  flex-shrink: 0;
+}
+.screen-c .map-area { flex: 1; background: #1a2744; position: relative; }
+.screen-c .result-strip {
+  background: #0a0f1e;
+  border-top: 1px solid #1e293b;
+  padding: 5px 8px;
+  flex-shrink: 0;
+}
+
+/* Shared mock elements */
+.mock-map-bg {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    45deg, #1e2d4a 0px, #1e2d4a 1px, transparent 1px, transparent 12px
+  );
+}
+.mock-road { position: absolute; background: #2d4a6e; border-radius: 1px; }
+.mock-road.h { height: 3px; }
+.mock-road.v { width: 3px; }
+.mock-marker {
+  position: absolute;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  border: 1.5px solid white;
+}
+.mock-route {
+  position: absolute;
+  border: 2px dashed #60a5fa;
+  border-radius: 50%;
+  opacity: 0.6;
+}
+.msg-bubble {
+  border-radius: 6px;
+  padding: 4px 6px;
+  font-size: 9px;
+  line-height: 1.3;
+  color: #cbd5e1;
+}
+.msg-user { background: #1e3a5f; align-self: flex-end; max-width: 80%; }
+.msg-ai   { background: #1a2035; max-width: 90%; }
+.mock-input {
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 4px;
+  height: 16px;
+  flex: 1;
+  font-size: 8px;
+  color: #475569;
+  display: flex;
+  align-items: center;
+  padding: 0 5px;
+}
+.mock-btn {
+  background: #2563eb;
+  border-radius: 3px;
+  width: 16px; height: 16px;
+  display: flex; align-items: center; justify-content: center;
+  color: white; font-size: 10px; flex-shrink: 0;
+}
+.mock-logo {
+  color: #60a5fa; font-weight: bold; font-size: 10px; letter-spacing: 0.5px;
+}
+.badge {
+  background: #1e3a5f; color: #60a5fa;
+  border-radius: 3px; padding: 2px 4px; font-size: 8px;
+}
+</style>
+
+<div class="layout-cards">
+
+  <!-- LAYOUT A -->
+  <div class="layout-card" data-choice="a" onclick="toggleSelect(this)">
+    <h3>A — Sidebar + Mappa</h3>
+    <div class="tag">Classic split · Raccomandato</div>
+    <div class="screen screen-a">
+      <div class="chat-panel">
+        <div class="mock-logo">Ask Rovereto</div>
+        <div style="flex:1;display:flex;flex-direction:column;gap:3px;overflow:hidden;margin-top:4px;">
+          <div class="msg-bubble msg-user">Voglio andare al MART in bici</div>
+          <div class="msg-bubble msg-ai">🚲 Prendi il bike sharing in Via Dogana (2 min) poi segui la pista ciclabile...</div>
+          <div style="display:flex;gap:2px;flex-wrap:wrap;margin-top:2px;">
+            <div class="badge">🚲 bike</div>
+            <div class="badge">7 min</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:4px;margin-top:auto;">
+          <div class="mock-input">Scrivi qui...</div>
+          <div class="mock-btn">→</div>
+        </div>
+      </div>
+      <div class="map-panel">
+        <div class="mock-map-bg"></div>
+        <div class="mock-road h" style="top:40%;left:0;right:0;"></div>
+        <div class="mock-road h" style="top:60%;left:0;right:0;opacity:.5"></div>
+        <div class="mock-road v" style="left:45%;top:0;bottom:0;"></div>
+        <div class="mock-marker" style="top:35%;left:40%;background:#22c55e;" title="origine"></div>
+        <div class="mock-marker" style="top:55%;left:65%;background:#60a5fa;" title="bike sharing"></div>
+        <div class="mock-marker" style="top:70%;left:75%;background:#f472b6;" title="destinazione"></div>
+        <svg style="position:absolute;inset:0;width:100%;height:100%;" viewBox="0 0 180 160">
+          <path d="M72 56 Q100 64 117 88 Q130 108 135 112" stroke="#60a5fa" stroke-width="2" fill="none" stroke-dasharray="4,3" opacity="0.8"/>
+        </svg>
+      </div>
+    </div>
+    <p>Chat a sinistra, mappa grande a destra. Layout familiare, entrambe le aree sempre visibili. Ottimo per la demo perché giudici vedono tutto in simultanea.</p>
+  </div>
+
+  <!-- LAYOUT B -->
+  <div class="layout-card" data-choice="b" onclick="toggleSelect(this)">
+    <h3>B — Mappa Full + Chat Overlay</h3>
+    <div class="tag">Immersive · Alto impatto visivo</div>
+    <div class="screen screen-b">
+      <div class="map-bg">
+        <div class="mock-map-bg"></div>
+        <div class="mock-road h" style="top:40%;left:0;right:0;"></div>
+        <div class="mock-road h" style="top:60%;left:0;right:0;opacity:.5"></div>
+        <div class="mock-road v" style="left:45%;top:0;bottom:0;"></div>
+        <div class="mock-marker" style="top:25%;left:35%;background:#22c55e;"></div>
+        <div class="mock-marker" style="top:40%;left:55%;background:#60a5fa;"></div>
+        <div class="mock-marker" style="top:52%;left:68%;background:#f472b6;"></div>
+        <svg style="position:absolute;inset:0;width:100%;height:100%;" viewBox="0 0 280 160">
+          <path d="M98 40 Q115 52 154 64 Q175 72 190 83" stroke="#60a5fa" stroke-width="2" fill="none" stroke-dasharray="4,3" opacity="0.8"/>
+        </svg>
+        <div style="position:absolute;top:6px;left:8px;" class="mock-logo">Ask Rovereto</div>
+      </div>
+      <div class="float-panel">
+        <div style="flex:1;">
+          <div class="msg-bubble msg-ai" style="margin-bottom:4px;font-size:8px;">🚲 Bike sharing in Via Dogana → pista ciclabile → MART (7 min)</div>
+          <div class="mock-input" style="font-size:7px;">Dove vuoi andare?</div>
+        </div>
+        <div class="mock-btn">→</div>
+      </div>
+    </div>
+    <p>La mappa domina tutto lo schermo. Chat compatta in basso come overlay. Effetto "app di navigazione" molto moderno. Rischioso se la risposta AI è lunga.</p>
+  </div>
+
+  <!-- LAYOUT C -->
+  <div class="layout-card" data-choice="c" onclick="toggleSelect(this)">
+    <h3>C — Chat Top + Mappa Sotto</h3>
+    <div class="tag">Mobile-first · Lineare</div>
+    <div class="screen screen-c">
+      <div class="top-bar">
+        <div class="mock-logo">Ask Rovereto</div>
+        <div style="flex:1;"></div>
+        <div class="mock-input" style="max-width:120px;font-size:7px;">Dove vuoi andare?</div>
+        <div class="mock-btn">→</div>
+      </div>
+      <div class="map-area">
+        <div class="mock-map-bg"></div>
+        <div class="mock-road h" style="top:45%;left:0;right:0;"></div>
+        <div class="mock-road v" style="left:50%;top:0;bottom:0;"></div>
+        <div class="mock-marker" style="top:30%;left:45%;background:#22c55e;"></div>
+        <div class="mock-marker" style="top:55%;left:62%;background:#f472b6;"></div>
+        <svg style="position:absolute;inset:0;width:100%;height:100%;" viewBox="0 0 280 90">
+          <path d="M126 27 Q140 36 174 50" stroke="#60a5fa" stroke-width="2" fill="none" stroke-dasharray="4,3" opacity="0.8"/>
+        </svg>
+      </div>
+      <div class="result-strip">
+        <div style="display:flex;gap:6px;align-items:center;">
+          <div class="badge">🚲 7 min</div>
+          <div style="font-size:8px;color:#64748b;">Via Dogana → pista ciclabile → MART</div>
+        </div>
+      </div>
+    </div>
+    <p>Input in alto come una search bar, mappa grande, strip risultati in fondo. Semplice da costruire, ma la risposta AI è nascosta — non ottimale per la demo.</p>
+  </div>
+
+</div>
+
+<div style="background:#0f172a;border:1px solid #1e293b;border-radius:8px;padding:14px;margin-top:8px;">
+  <div class="label" style="color:#64748b;margin-bottom:8px;">NOTA PER LA DEMO</div>
+  <div style="font-size:12px;color:#94a3b8;line-height:1.6;">
+    Il Layout A è quello più <strong style="color:#f1f5f9;">demo-friendly</strong>: i giudici vedono in simultanea la chat AI che risponde <em>e</em> la mappa che si aggiorna.
+    Il Layout B ha più impatto visivo ma nasconde la risposta testuale.
+    Il Layout C è il più semplice da costruire ma il meno efficace per una presentazione.
+  </div>
+</div>

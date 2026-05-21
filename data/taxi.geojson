@@ -1,0 +1,16 @@
+{
+"type": "FeatureCollection",
+"name": "taxi",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:EPSG::25832" } },
+"features": [
+{ "type": "Feature", "properties": { "nome": "TAXI TRENTO - VIA SANTA CROCE", "indirizzo": "via S.Croce n. 26", "x": 46.064461, "y": 11.12323 }, "geometry": { "type": "Point", "coordinates": [ 664214.243541363393888, 5103401.178857708349824 ] } },
+{ "type": "Feature", "properties": { "nome": "TAXI TRENTO - VIA DELLA SCIENZA E DEL LAVORO", "indirizzo": "via della Scienza e del Lavoro", "x": 46.059791, "y": 11.11596 }, "geometry": { "type": "Point", "coordinates": [ 663665.783103416324593, 5102867.331194296479225 ] } },
+{ "type": "Feature", "properties": { "nome": "TAXI TRENTO - PIAZZA DANTE", "indirizzo": "piazza Dante, 9", "x": 46.072017, "y": 11.121362 }, "geometry": { "type": "Point", "coordinates": [ 664047.37655992154032, 5104236.836166465654969 ] } },
+{ "type": "Feature", "properties": { "nome": "TAXI TRENTO - VIA PETRARCA", "indirizzo": "via Petrarca 8", "x": 46.074755, "y": 11.123907 }, "geometry": { "type": "Point", "coordinates": [ 664236.055540533619933, 5104546.296579884365201 ] } },
+{ "type": "Feature", "properties": { "nome": "TAXI TRENTO - PIAZZALE ZUFFO", "indirizzo": "piazzale Zuffo", "x": 46.075811, "y": 11.109615 }, "geometry": { "type": "Point", "coordinates": [ 663127.798701038351282, 5104634.203779332339764 ] } },
+{ "type": "Feature", "properties": { "nome": "TAXI TRENTO - VIA GILLI", "indirizzo": "via Gilli 4", "x": 46.090976, "y": 11.118946 }, "geometry": { "type": "Point", "coordinates": [ 663804.40689567103982, 5106338.307256326079369 ] } },
+{ "type": "Feature", "properties": { "nome": "TAXI TRENTO - VIA DEGASPERI", "indirizzo": "via Degasperi 77", "x": 46.044135, "y": 11.129531 }, "geometry": { "type": "Point", "coordinates": [ 664762.027214160072617, 5101155.884696679189801 ] } },
+{ "type": "Feature", "properties": { "nome": "TAXI TRENTO - LARGO MEDAGLIE D'ORO", "indirizzo": "Largo Medaglie d'oro 9", "x": 46.057744, "y": 11.132683 }, "geometry": { "type": "Point", "coordinates": [ 664965.354877129662782, 5102674.447014361619949 ] } },
+{ "type": "Feature", "properties": { "nome": "TAXI TRENTO - VIA BELENZANI", "indirizzo": "via Belenzani in prossimità piazza Duomo", "x": 46.067866, "y": 11.121281 }, "geometry": { "type": "Point", "coordinates": [ 664068.911691204295494, 5103773.501795804128051 ] } }
+]
+}

@@ -1,0 +1,17 @@
+{
+"type": "FeatureCollection",
+"name": "stazioni",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:EPSG::25832" } },
+"features": [
+{ "type": "Feature", "properties": { "nome": "FS - Trento", "tratta": "FFSS" }, "geometry": { "type": "Point", "coordinates": [ 663944.656748452805914, 5104298.917232472449541 ] } },
+{ "type": "Feature", "properties": { "nome": "FTM - Trento", "tratta": "FTM" }, "geometry": { "type": "Point", "coordinates": [ 663996.885166820604354, 5104499.330332761630416 ] } },
+{ "type": "Feature", "properties": { "nome": "FTM - Commerciale", "tratta": "FTM" }, "geometry": { "type": "Point", "coordinates": [ 663351.868307443684898, 5106233.31094419118017 ] } },
+{ "type": "Feature", "properties": { "nome": "FTM - Gardolo", "tratta": "FTM" }, "geometry": { "type": "Point", "coordinates": [ 662641.79701679747086, 5108211.006197482347488 ] } },
+{ "type": "Feature", "properties": { "nome": "FTM - Spini", "tratta": "FTM" }, "geometry": { "type": "Point", "coordinates": [ 662633.718297392129898, 5109386.009168359450996 ] } },
+{ "type": "Feature", "properties": { "nome": "FTM - Lamar", "tratta": "FTM" }, "geometry": { "type": "Point", "coordinates": [ 662823.696799723547883, 5110201.913859383203089 ] } },
+{ "type": "Feature", "properties": { "nome": "VALS - S. Chiara", "tratta": "VALSUGANA" }, "geometry": { "type": "Point", "coordinates": [ 665188.628015120048076, 5102306.966518895700574 ] } },
+{ "type": "Feature", "properties": { "nome": "VALS - S. Bartolomeo", "tratta": "VALSUGANA" }, "geometry": { "type": "Point", "coordinates": [ 665186.61540303088259, 5101536.955145822837949 ] } },
+{ "type": "Feature", "properties": { "nome": "VALS - Villazzano", "tratta": "VALSUGANA" }, "geometry": { "type": "Point", "coordinates": [ 665501.018153356621042, 5101292.232786421664059 ] } },
+{ "type": "Feature", "properties": { "nome": "VALS - Povo Mesiano", "tratta": "VALSUGANA" }, "geometry": { "type": "Point", "coordinates": [ 665714.660803048638627, 5103486.895321642048657 ] } }
+]
+}

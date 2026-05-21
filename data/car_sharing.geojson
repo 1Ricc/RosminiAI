@@ -1,0 +1,15 @@
+{
+"type": "FeatureCollection",
+"name": "car_sharing",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:EPSG::25832" } },
+"features": [
+{ "type": "Feature", "properties": { "via": "via Soteri (nel parcheggio in prossimità del parco pubblico denominato Giardino Mattia Giosafat)", "auto": 1, "ordinanza": "n° 4_2016" }, "geometry": { "type": "Point", "coordinates": [ 664007.362553861457855, 5105823.197237076237798 ] } },
+{ "type": "Feature", "properties": { "via": "corso del Lavoro e della Scienza (sul lato est della strada  in prossimitàdel MUSE)", "auto": 1, "ordinanza": "n°810-2013" }, "geometry": { "type": "Point", "coordinates": [ 663637.3021852937527, 5103143.577801764942706 ] } },
+{ "type": "Feature", "properties": { "via": "via S. Croce (sul lato destro della strada tra la Cassa Rurale e il Ristorante Pedavena)", "auto": 1, "ordinanza": "n°571-2010" }, "geometry": { "type": "Point", "coordinates": [ 664218.582466367864981, 5103427.089521676301956 ] } },
+{ "type": "Feature", "properties": { "via": "Piazza Dante (sul lato sinistro della strada vicino all’accesso al Parco di fronte al Palazzo della Regione)", "auto": 1, "ordinanza": "n°924-2011" }, "geometry": { "type": "Point", "coordinates": [ 664043.507391764782369, 5104138.399610000662506 ] } },
+{ "type": "Feature", "properties": { "via": "piazza Venezia (zona Port'Aquila-in prossimità dei civici 37-40)", "auto": 1, "ordinanza": "n°571-2010" }, "geometry": { "type": "Point", "coordinates": [ 664541.897540069883689, 5103972.531068853102624 ] } },
+{ "type": "Feature", "properties": { "via": "piazza Dante (sul lato sinistro della strada vicino all’accesso al Parco di fronte al Palazzo della Regione)", "auto": 1, "ordinanza": "n°571-2010" }, "geometry": { "type": "Point", "coordinates": [ 664043.063918842817657, 5104140.32409471925348 ] } },
+{ "type": "Feature", "properties": { "via": "via Gocciadoro (nel parcheggio posto tra la Piscina Fogazzaro e l’Ospedale, di fianco al Ristorante Loto)", "auto": 1, "ordinanza": "n° 4_2016" }, "geometry": { "type": "Point", "coordinates": [ 664861.342314705485478, 5102492.634622058831155 ] } },
+{ "type": "Feature", "properties": { "via": "via dei Rivi (sul lato ovest, in prossimità dell'intersezione con via Dallafior)", "auto": 1, "ordinanza": "n°1088-2014" }, "geometry": { "type": "Point", "coordinates": [ 666614.729701323551126, 5103577.377799411304295 ] } }
+]
+}

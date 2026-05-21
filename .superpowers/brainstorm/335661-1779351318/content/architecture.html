@@ -1,0 +1,206 @@
+<h2>Architettura di Sistema — Ask Rovereto</h2>
+<p class="subtitle">Vue 3 + FastAPI + Gemini + OpenRouteService</p>
+
+<style>
+.arch-diagram {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 24px 0;
+  font-family: monospace;
+}
+.arch-row {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  align-items: stretch;
+}
+.arch-box {
+  border: 2px solid #444;
+  border-radius: 8px;
+  padding: 12px 16px;
+  min-width: 140px;
+  text-align: center;
+  font-size: 13px;
+  line-height: 1.4;
+}
+.arch-box.frontend { border-color: #4ade80; background: #052e16; }
+.arch-box.backend  { border-color: #60a5fa; background: #0f172a; }
+.arch-box.ai       { border-color: #f472b6; background: #2d1344; }
+.arch-box.data     { border-color: #fbbf24; background: #1c1207; }
+.arch-box.ext      { border-color: #94a3b8; background: #1e293b; }
+.arch-box .label   { font-size: 10px; opacity: 0.6; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+.arch-box .name    { font-size: 15px; font-weight: bold; color: #f1f5f9; }
+.arch-box .tech    { font-size: 11px; opacity: 0.75; margin-top: 4px; color: #94a3b8; }
+.arch-arrow {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #64748b;
+  font-size: 18px;
+  letter-spacing: 2px;
+}
+.arch-arrow.horiz {
+  flex-direction: row;
+  gap: 4px;
+  padding: 0 8px;
+  writing-mode: horizontal-tb;
+  font-size: 14px;
+  color: #475569;
+}
+.flow-label {
+  font-size: 10px;
+  color: #64748b;
+  text-align: center;
+  margin-top: -6px;
+  margin-bottom: 6px;
+  font-family: monospace;
+}
+.section-title {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: #64748b;
+  text-align: center;
+  margin: 8px 0 4px;
+  border-top: 1px solid #1e293b;
+  padding-top: 12px;
+}
+.data-row {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.data-chip {
+  border: 1px solid #fbbf24;
+  border-radius: 4px;
+  padding: 4px 10px;
+  font-size: 11px;
+  color: #fbbf24;
+  background: #1c1207;
+  font-family: monospace;
+}
+.legend {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 16px;
+  font-size: 11px;
+}
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.legend-dot {
+  width: 10px; height: 10px;
+  border-radius: 2px;
+  border: 2px solid;
+}
+</style>
+
+<div class="arch-diagram">
+
+  <!-- LAYER 1: Frontend -->
+  <div class="section-title">LAYER FRONTEND</div>
+  <div class="arch-row">
+    <div class="arch-box frontend">
+      <div class="label">UI Chat</div>
+      <div class="name">ChatPanel</div>
+      <div class="tech">Vue 3 component<br>input + message stream</div>
+    </div>
+    <div class="arch-box frontend">
+      <div class="label">UI Mappa</div>
+      <div class="name">MapView</div>
+      <div class="tech">Leaflet.js<br>markers + polyline route</div>
+    </div>
+    <div class="arch-box frontend">
+      <div class="label">UI Info</div>
+      <div class="name">SuggestionCard</div>
+      <div class="tech">Risultato AI<br>step by step</div>
+    </div>
+  </div>
+
+  <!-- Arrow down -->
+  <div class="arch-arrow">↕ HTTP REST (fetch)</div>
+  <div class="flow-label">POST /chat — { message, context } → { reply, route_geojson, markers }</div>
+
+  <!-- LAYER 2: Backend -->
+  <div class="section-title">LAYER BACKEND — FastAPI (Python)</div>
+  <div class="arch-row">
+    <div class="arch-box backend">
+      <div class="label">Endpoint</div>
+      <div class="name">/chat</div>
+      <div class="tech">POST<br>orchestrazione principale</div>
+    </div>
+    <div class="arch-box backend">
+      <div class="label">Modulo</div>
+      <div class="name">AI Agent</div>
+      <div class="tech">Gemini function calling<br>intent → tools → risposta</div>
+    </div>
+    <div class="arch-box backend">
+      <div class="label">Modulo</div>
+      <div class="name">Geo Engine</div>
+      <div class="tech">pyproj + shapely<br>UTM→WGS84, nearest POI</div>
+    </div>
+  </div>
+
+  <!-- Arrow down -->
+  <div class="arch-arrow">↕</div>
+
+  <!-- LAYER 3: External + Data -->
+  <div class="section-title">SERVIZI ESTERNI + DATI</div>
+  <div class="arch-row">
+    <div class="arch-box ai">
+      <div class="label">AI</div>
+      <div class="name">Gemini API</div>
+      <div class="tech">gemini-2.0-flash<br>function calling</div>
+    </div>
+    <div class="arch-box ext">
+      <div class="label">Routing</div>
+      <div class="name">OpenRouteService</div>
+      <div class="tech">foot-walking<br>cycling-regular<br>driving-car</div>
+    </div>
+    <div class="arch-box data">
+      <div class="label">Dati</div>
+      <div class="name">GeoJSON In-Memory</div>
+      <div class="tech">caricati all'avvio<br>riproiettati WGS84</div>
+    </div>
+  </div>
+
+  <!-- Data chips -->
+  <div class="data-row">
+    <div class="data-chip">bike_sharing.csv</div>
+    <div class="data-chip">car_sharing.csv</div>
+    <div class="data-chip">zone_parcheggio.csv</div>
+    <div class="data-chip">stazioni.csv</div>
+    <div class="data-chip">taxi.csv</div>
+    <div class="data-chip">piste_ciclabili.csv</div>
+    <div class="data-chip">patti.csv</div>
+  </div>
+
+</div>
+
+<!-- Legend -->
+<div class="legend">
+  <div class="legend-item"><div class="legend-dot" style="border-color:#4ade80;background:#052e16"></div> Frontend Vue</div>
+  <div class="legend-item"><div class="legend-dot" style="border-color:#60a5fa;background:#0f172a"></div> Backend FastAPI</div>
+  <div class="legend-item"><div class="legend-dot" style="border-color:#f472b6;background:#2d1344"></div> AI Gemini</div>
+  <div class="legend-item"><div class="legend-dot" style="border-color:#fbbf24;background:#1c1207"></div> Open Data</div>
+  <div class="legend-item"><div class="legend-dot" style="border-color:#94a3b8;background:#1e293b"></div> Servizi Esterni</div>
+</div>
+
+<div style="margin-top:24px;padding:16px;border:1px solid #1e293b;border-radius:8px;background:#0f172a;">
+  <div class="label" style="color:#94a3b8;margin-bottom:8px;">GOLDEN PATH DELLA DEMO</div>
+  <div style="font-family:monospace;font-size:12px;color:#cbd5e1;line-height:2;">
+    Utente digita messaggio →
+    <span style="color:#60a5fa">FastAPI riceve POST</span> →
+    <span style="color:#f472b6">Gemini estrae intent + chiama tools</span> →
+    <span style="color:#fbbf24">Geo Engine trova POI vicini</span> →
+    <span style="color:#94a3b8">ORS calcola percorso</span> →
+    <span style="color:#f472b6">Gemini compone risposta in italiano</span> →
+    <span style="color:#4ade80">Mappa mostra route + markers</span>
+  </div>
+</div>
