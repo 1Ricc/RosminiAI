@@ -67,7 +67,7 @@ ask-rovereto/
 
 Converte tutti i GeoJSON da EPSG:25832 a WGS84. Va eseguito una volta sola prima di avviare il backend.
 
-- [ ] **Step 1: Crea `scripts/reproject.py`**
+- [x] **Step 1: Crea `scripts/reproject.py`**
 
 ```python
 #!/usr/bin/env python3
@@ -138,7 +138,7 @@ if __name__ == "__main__":
     main()
 ```
 
-- [ ] **Step 2: Installa pyproj e lancia lo script**
+- [x] **Step 2: Installa pyproj e lancia lo script**
 
 ```bash
 pip install pyproj
