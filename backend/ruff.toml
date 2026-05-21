@@ -1,0 +1,6 @@
+[lint]
+select = ["E", "F", "I", "UP"]
+
+[format]
+quote-style = "double"
+indent-style = "space"

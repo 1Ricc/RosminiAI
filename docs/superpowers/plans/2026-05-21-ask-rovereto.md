@@ -67,7 +67,7 @@ ask-rovereto/
 
 Converte tutti i GeoJSON da EPSG:25832 a WGS84. Va eseguito una volta sola prima di avviare il backend.
 
-- [ ] **Step 1: Crea `scripts/reproject.py`**
+- [x] **Step 1: Crea `scripts/reproject.py`**
 
 ```python
 #!/usr/bin/env python3
@@ -138,7 +138,7 @@ if __name__ == "__main__":
     main()
 ```
 
-- [ ] **Step 2: Installa pyproj e lancia lo script**
+- [x] **Step 2: Installa pyproj e lancia lo script**
 
 ```bash
 pip install pyproj
@@ -159,7 +159,7 @@ Output atteso:
 File processati in: .../data/processed
 ```
 
-- [ ] **Step 3: Verifica visiva coordinate**
+- [x] **Step 3: Verifica visiva coordinate**
 
 ```bash
 python3 -c "
@@ -175,7 +175,7 @@ print('Lat:', coords[1], '(atteso ~46.0)')
 
 Entrambi i valori devono essere in range geografico italiano (lat ~45-47, lon ~10-12). Se le coordinate sono ancora ~660000/5100000, lo script non ha funzionato.
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add scripts/reproject.py data/processed/
@@ -194,7 +194,7 @@ git commit -m "feat: script riproiezione GeoJSON EPSG:25832→WGS84"
 - Create: `backend/ai/__init__.py`
 - Create: `backend/routers/__init__.py`
 
-- [ ] **Step 1: Crea `backend/requirements.txt`**
+- [x] **Step 1: Crea `backend/requirements.txt`**
 
 ```
 fastapi==0.115.5
@@ -207,14 +207,14 @@ pytest==8.3.4
 pytest-asyncio==0.24.0
 ```
 
-- [ ] **Step 2: Installa dipendenze**
+- [x] **Step 2: Installa dipendenze**
 
 ```bash
 cd backend
 pip install -r requirements.txt
 ```
 
-- [ ] **Step 3: Crea `backend/.env.example`**
+- [x] **Step 3: Crea `backend/.env.example`**
 
 ```
 GEMINI_API_KEY=your_gemini_api_key_here
@@ -222,20 +222,20 @@ ORS_API_KEY=your_ors_api_key_here
 DATA_DIR=../data/processed
 ```
 
-- [ ] **Step 4: Crea `backend/.env`** (copia e compila con chiavi reali)
+- [x] **Step 4: Crea `backend/.env`** (copia e compila con chiavi reali)
 
 ```bash
 cp backend/.env.example backend/.env
 # Apri .env e inserisci le chiavi reali
 ```
 
-- [ ] **Step 5: Crea package init files**
+- [x] **Step 5: Crea package init files**
 
 ```bash
 touch backend/geo/__init__.py backend/ai/__init__.py backend/routers/__init__.py backend/tests/__init__.py
 ```
 
-- [ ] **Step 6: Crea `backend/main.py`**
+- [x] **Step 6: Crea `backend/main.py`**
 
 ```python
 import os
@@ -286,7 +286,7 @@ if data_dir.exists():
 app.include_router(chat_router, prefix="/api")
 ```
 
-- [ ] **Step 7: Verifica avvio** (il loader non esiste ancora — è normale che fallisca con ImportError)
+- [x] **Step 7: Verifica avvio** (il loader non esiste ancora — è normale che fallisca con ImportError)
 
 ```bash
 cd backend
