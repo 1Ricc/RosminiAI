@@ -5,16 +5,39 @@ Usa open data del Comune + Gemini AI + OpenRouteService.
 
 ## Setup rapido
 
+> **Arch Linux / sistemi con Python externally-managed:** `pip install` globale non funziona.
+> Usa il venv come descritto sotto.
+
 ```bash
-# 1. Copia le chiavi API
+# 1. Crea il virtual environment Python (una volta sola)
+python3 -m venv .venv
+.venv/bin/pip install -r backend/requirements.txt
+
+# 2. Copia le chiavi API
 cp backend/.env.example backend/.env
 # → inserisci GEMINI_API_KEY e ORS_API_KEY in backend/.env
 
-# 2. Avvia tutto
-./run.sh
+# 3. Riproietta i dati geografici (una volta sola)
+.venv/bin/python scripts/reproject.py
+
+# 4. Avvia il backend
+cd backend && ../.venv/bin/uvicorn main:app --reload --port 8000
+
+# 5. Avvia il frontend (in un altro terminale)
+cd frontend && npm install && npm run dev
 ```
 
 Apri http://localhost:5173
+
+### Comandi utili
+
+```bash
+# Test backend
+cd backend && ../.venv/bin/pytest tests/ -v
+
+# Aggiornare dipendenze Python
+.venv/bin/pip install -r backend/requirements.txt
+```
 
 ## Stack
 
