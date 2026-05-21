@@ -1,13 +1,12 @@
-import os
+import json
 from typing import Any
 
 import httpx
-import google.generativeai as genai
-from google.api_core.exceptions import GoogleAPIError, ResourceExhausted
+import ollama
 from dotenv import load_dotenv
 
 from ai.prompt import SYSTEM_PROMPT, KNOWN_PLACES
-from ai.tools import GEMINI_TOOL
+from ai.tools import OLLAMA_TOOLS
 from geo.nearest import find_nearest
 from geo.routing import get_route, co2_saved_grams
 
@@ -210,56 +209,43 @@ async def get_fallback_response(message: str = "") -> dict:
 
 async def run_agent(message: str, datasets: dict) -> dict:
     """
-    Esegue il loop Gemini function calling.
+    Esegue il loop Ollama function calling con gemma4.
     Restituisce { reply, markers, route, chips }.
     """
-    genai.configure(api_key=os.getenv("GEMINI_API_KEY", ""))
+    client = ollama.AsyncClient()
+    messages = [
+        {"role": "system", "content": SYSTEM_PROMPT},
+        {"role": "user",   "content": message},
+    ]
+    geo_state: dict = {"markers": []}
+    last_response = None
 
-    model = genai.GenerativeModel(
-        model_name="gemini-2.5-flash",
-        tools=[GEMINI_TOOL],
-        system_instruction=SYSTEM_PROMPT,
-    )
-
-    chat = model.start_chat()
     try:
-        response = chat.send_message(message)
-        geo_state: dict = {"markers": []}
-
-        # Loop tool calling — max 5 iterazioni per sicurezza
         for _ in range(5):
-            fn_calls = [
-                part.function_call
-                for part in response.parts
-                if hasattr(part, "function_call")
-                and part.function_call
-                and part.function_call.name
-            ]
-            if not fn_calls:
+            response = await client.chat(
+                model="gemma4",
+                messages=messages,
+                tools=OLLAMA_TOOLS,
+            )
+            last_response = response
+            messages.append(response.message)
+
+            if not response.message.tool_calls:
                 break
 
-            tool_responses = []
-            for fc in fn_calls:
-                result = await execute_tool(fc.name, dict(fc.args), datasets, geo_state)
-                tool_responses.append(
-                    genai.protos.Part(
-                        function_response=genai.protos.FunctionResponse(
-                            name=fc.name,
-                            response={"result": result},
-                        )
-                    )
-                )
+            for tool_call in response.message.tool_calls:
+                name = tool_call.function.name
+                args = dict(tool_call.function.arguments)
+                result = await execute_tool(name, args, datasets, geo_state)
+                messages.append({
+                    "role":    "tool",
+                    "content": json.dumps(result, ensure_ascii=False),
+                })
 
-            response = chat.send_message(
-                genai.protos.Content(parts=tool_responses)
-            )
-
-    except (ResourceExhausted, GoogleAPIError, Exception):
+    except Exception:
         return await get_fallback_response(message)
 
-    reply = "".join(
-        part.text for part in response.parts if hasattr(part, "text") and part.text
-    )
+    reply = last_response.message.content or "" if last_response else ""
 
     chips = []
     if "distance_m" in geo_state and "duration_s" in geo_state:
