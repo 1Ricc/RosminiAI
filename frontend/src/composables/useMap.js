@@ -48,7 +48,7 @@ export function useMap(mapEl) {
     map = L.map(mapEl.value, { zoomControl: false, attributionControl: true })
       .setView([45.8897, 11.0408], 14)
 
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
       attribution: '© OpenStreetMap contributors © CARTO',
       maxZoom: 19,
     }).addTo(map)

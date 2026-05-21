@@ -1,7 +1,16 @@
 <template>
-  <div class="app-layout" :class="{ collapsed }">
-    <ChatPanel @result="onResult" />
-    <MapView ref="mapRef" />
+  <div class="app-layout">
+    <div class="map-full">
+      <MapView ref="mapRef" />
+    </div>
+
+    <aside class="chat-overlay" :class="{ collapsed }">
+      <div class="aurora-container">
+        <div class="aurora-blob aurora-1"></div>
+      </div>
+      <ChatPanel @result="onResult" />
+    </aside>
+
     <button class="toggle-btn" @click="collapsed = !collapsed" :title="collapsed ? 'Apri chat' : 'Chiudi chat'">
       {{ collapsed ? '›' : '‹' }}
     </button>
@@ -31,41 +40,60 @@ function onResult(data) {
 html, body, #app {
   height: 100%;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  overflow: hidden;
 }
 
 .app-layout {
-  display: grid;
-  grid-template-columns: 415px 1fr;
-  height: 100vh;
-  overflow: hidden;
   position: relative;
-  transition: grid-template-columns 0.3s ease;
+  width: 100vw;
+  height: 100vh;
 }
 
-.app-layout.collapsed {
-  grid-template-columns: 0px 1fr;
+/* Mappa: sempre a schermo pieno, sotto tutto */
+.map-full {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
 }
 
+/* Chat: overlay sovrapposto a sinistra */
+.chat-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 415px;
+  height: 100%;
+  z-index: 100;
+  transition: transform 0.3s ease;
+}
+
+.chat-overlay.collapsed {
+  transform: translateX(-415px);
+}
+
+/* Pulsante toggle: fixed così non viene mai clippato */
 .toggle-btn {
   position: fixed;
   left: 415px;
   top: 50%;
   transform: translateY(-50%);
-  z-index: 1000;
+  z-index: 200;
   width: 22px;
   height: 48px;
-  background: #ffffff;
-  border: 1px solid #e2e8f0;
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
   border-left: none;
   border-radius: 0 8px 8px 0;
-  box-shadow: 3px 0 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 3px 0 8px rgba(0, 0, 0, 0.05);
   cursor: pointer;
   font-size: 14px;
-  color: #64748b;
+  color: #334155;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: left 0.3s ease, color 0.15s;
+  transition: left 0.3s ease, color 0.15s, background 0.2s;
   padding: 0;
 }
 
@@ -73,10 +101,42 @@ html, body, #app {
   color: #2563eb;
 }
 
-.app-layout.collapsed .toggle-btn {
-  left: 0px;
+.app-layout:has(.collapsed) .toggle-btn {
+  left: 0;
   border-left: 1px solid #e2e8f0;
   border-right: none;
   border-radius: 8px 0 0 8px;
+}
+
+/* Aurora Effect Behind Chat */
+.aurora-container {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.aurora-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(120px);
+  opacity: 0.4;
+  animation: float 30s infinite ease-in-out alternate;
+}
+
+.aurora-1 {
+  width: 800px;
+  height: 800px;
+  background: #3b82f6; /* Blue */
+  top: -200px;
+  left: -200px;
+}
+
+@keyframes float {
+  0% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(80px, -60px) scale(1.05); }
+  66% { transform: translate(-40px, 80px) scale(0.95); }
+  100% { transform: translate(30px, 60px) scale(1.1); }
 }
 </style>

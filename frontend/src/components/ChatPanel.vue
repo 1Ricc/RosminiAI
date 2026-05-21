@@ -1,7 +1,7 @@
 <template>
   <div class="chat-panel">
     <div class="chat-header">
-      <span class="logo">⬡ Ask Rovereto</span>
+      <span class="logo">RosminiAI</span>
     </div>
 
     <div class="messages" ref="messagesEl">
@@ -86,34 +86,37 @@ watch(messages, async () => {
   display: flex;
   flex-direction: column;
   height: 100%;
-  background: #f8fafc;
-  border-right: 1px solid #e2e8f0;
-  box-shadow: 4px 0 16px rgba(0, 0, 0, 0.12);
+  background: rgba(186, 230, 253, 0.25); /* Light blue / Sky tint */
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-right: 1px solid rgba(186, 230, 253, 0.4);
+  box-shadow: 4px 0 20px rgba(0, 0, 0, 0.05);
   z-index: 10;
   position: relative;
+  overflow: hidden;
 }
 
 .chat-header {
-  padding: 14px 16px;
-  border-bottom: 1px solid #e2e8f0;
-  background: #ffffff;
+  padding: 16px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+  background: transparent;
   flex-shrink: 0;
 }
 
 .logo {
-  font-weight: 700;
-  color: #2563eb;
-  font-size: 15px;
-  letter-spacing: 0.3px;
+  font-weight: 800;
+  color: #1e293b;
+  font-size: 18px;
+  letter-spacing: -0.5px;
 }
 
 .messages {
   flex: 1;
   overflow-y: auto;
-  padding: 16px;
+  padding: 20px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 16px;
 }
 
 .message.user {
@@ -129,27 +132,25 @@ watch(messages, async () => {
 }
 
 .bubble {
-  padding: 10px 14px;
-  border-radius: 12px;
-  font-size: 13px;
-  line-height: 1.55;
-  max-width: 88%;
+  padding: 12px 16px;
+  font-size: 14px;
+  line-height: 1.5;
+  max-width: 85%;
   white-space: pre-line;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.04);
 }
 
 .message.user .bubble {
-  background: #dbeafe;
-  color: #1e3a5f;
-  border-radius: 12px 12px 2px 12px;
+  background: #2563eb;
+  color: #ffffff;
+  border-radius: 18px 18px 4px 18px;
 }
 
 .message.ai .bubble {
-  background: #ffffff;
-  color: #374151;
-  border: 1px solid #e2e8f0;
-  border-left: 3px solid #2563eb;
-  border-radius: 2px 12px 12px 12px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  background: rgba(255, 255, 255, 0.85);
+  color: #334155;
+  border-radius: 4px 18px 18px 18px;
+  border: 1px solid rgba(255, 255, 255, 0.6);
 }
 
 .chips {
@@ -200,50 +201,57 @@ watch(messages, async () => {
 }
 
 .suggestions {
-  padding: 8px 12px;
+  padding: 8px 20px;
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
-  border-top: 1px solid #f1f5f9;
+  gap: 8px;
+  border-top: 1px solid rgba(255, 255, 255, 0.4);
+  background: transparent;
   flex-shrink: 0;
 }
 
 .suggestion-btn {
-  background: #f1f5f9;
-  border: 1px solid #e2e8f0;
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.8);
   border-radius: 16px;
-  padding: 4px 10px;
-  font-size: 11px;
-  color: #475569;
+  padding: 6px 12px;
+  font-size: 12px;
+  color: #334155;
   cursor: pointer;
-  transition: background 0.15s;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
 .suggestion-btn:hover {
-  background: #e2e8f0;
+  background: rgba(255, 255, 255, 0.9);
+  border-color: #2563eb;
+  color: #2563eb;
 }
 
 .input-row {
   display: flex;
   gap: 8px;
-  padding: 12px;
-  border-top: 1px solid #e2e8f0;
-  background: #ffffff;
+  padding: 16px 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.4);
+  background: transparent;
   flex-shrink: 0;
 }
 
 .chat-input {
   flex: 1;
-  border: 1px solid #cbd5e1;
-  border-radius: 8px;
-  padding: 8px 12px;
-  font-size: 13px;
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  border-radius: 12px;
+  padding: 10px 14px;
+  font-size: 14px;
   outline: none;
   font-family: inherit;
-  transition: border-color 0.15s;
+  transition: border-color 0.2s, background 0.2s;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.02);
 }
 
 .chat-input:focus {
+  background: #ffffff;
   border-color: #2563eb;
 }
 
@@ -251,24 +259,28 @@ watch(messages, async () => {
   background: #2563eb;
   color: white;
   border: none;
-  border-radius: 8px;
-  width: 36px;
-  height: 36px;
-  font-size: 16px;
+  border-radius: 12px;
+  width: 42px;
+  height: 42px;
+  font-size: 18px;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  transition: background 0.15s;
+  transition: background 0.2s, transform 0.1s;
+  box-shadow: 0 2px 4px rgba(37, 99, 235, 0.3);
 }
 
 .send-btn:hover:not(:disabled) {
   background: #1d4ed8;
+  transform: translateY(-1px);
 }
 
 .send-btn:disabled {
-  background: #93c5fd;
+  background: #94a3b8;
   cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
 }
 </style>
