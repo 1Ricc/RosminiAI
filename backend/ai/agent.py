@@ -60,7 +60,7 @@ async def execute_tool(
         poi_type = args["poi_type"]
         dataset_key = POI_TYPE_MAP.get(poi_type, poi_type)
         poi_list = datasets.get(dataset_key, [])
-        n = args.get("max_results", 3)
+        n = int(args.get("max_results", 3))
         nearest = find_nearest(poi_list, args["lat"], args["lon"], n=n)
 
         for poi in nearest:
@@ -136,7 +136,7 @@ async def run_agent(message: str, datasets: dict) -> dict:
     genai.configure(api_key=os.getenv("GEMINI_API_KEY", ""))
 
     model = genai.GenerativeModel(
-        model_name="gemini-2.0-flash",
+        model_name="gemini-2.5-flash",
         tools=[GEMINI_TOOL],
         system_instruction=SYSTEM_PROMPT,
     )
