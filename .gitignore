@@ -1,1 +1,34 @@
-*.zip
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+*.egg-info/
+.pytest_cache/
+
+# Node
+node_modules/
+dist/
+.vite/
+
+# Env (mai committare chiavi reali)
+.env
+!.env.example
+
+# Superpowers brainstorm temp
+.superpowers/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Large datasets — non servono in git
+data/isosec.geojson
+data/territorio_line.geojson
+data/territorio_polygon.geojson
+data/usosuolo_view.geojson
+data/grafo_web.geojson
+
+# Zip originali
+data/*.zip
