@@ -25,7 +25,8 @@ const categories = [
   { id: 'stazioni',     icon: '🚉', label: 'Stazioni',     api: true         },
   { id: 'taxi',         icon: '🚕', label: 'Taxi',         api: true         },
   { id: 'parcheggi',    icon: '🅿️', label: 'Parcheggi',   api: true         },
-  { id: 'patti',        icon: '🏛️', label: 'Cultura',     api: true         },
+  { id: 'luoghi_interesse', icon: '🏛️', label: 'Luoghi',   api: true         },
+  { id: 'patti',            icon: '🤝', label: 'Patti civici', api: true      },
   { id: 'ciclabili',    icon: '🛣️', label: 'Ciclabili',   api: false        },
   { id: 'zone',         icon: '🗺️', label: 'Zone',         api: false        },
 ]
