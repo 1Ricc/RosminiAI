@@ -52,7 +52,6 @@ def _load_geojson_polygons(path: Path) -> list[dict]:
         props = feat.get("properties", {})
         if geom.get("type") not in ("Polygon", "MultiPolygon"):
             continue
-        # Appiattisce tutte le coordinate per calcolare la bounding box
         coords = geom["coordinates"]
         if geom["type"] == "MultiPolygon":
             flat = [c for ring in coords for poly in ring for c in poly]
