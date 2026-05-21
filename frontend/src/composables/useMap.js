@@ -39,10 +39,15 @@ function makeColoredMarker(color) {
   })
 }
 
+function getPoiLabel(item) {
+  return item.fumetto || item.nome || item.via || item.descrizione || item.indirizzo || ''
+}
+
 export function useMap(mapEl) {
   let map = null
   let markersLayer = null
   let routeLayer = null
+  const poiLayers = new Map() // category → LayerGroup
 
   function init() {
     map = L.map(mapEl.value, { zoomControl: false, attributionControl: true })
@@ -119,5 +124,34 @@ export function useMap(mapEl) {
     }
   }
 
-  return { init, applyResult }
+  function showPoiLayer(category, items) {
+    // Rimuovi layer precedente della stessa categoria se esiste
+    if (poiLayers.has(category)) {
+      poiLayers.get(category).remove()
+      poiLayers.delete(category)
+    }
+
+    const color = MARKER_COLORS[category] ?? '#6b7280'
+    const layer = L.layerGroup()
+
+    for (const item of items) {
+      if (!item.lat || !item.lon) continue
+      const label = getPoiLabel(item)
+      L.marker([item.lat, item.lon], { icon: makeColoredMarker(color) })
+        .bindPopup(`<strong>${label || category}</strong>`)
+        .addTo(layer)
+    }
+
+    layer.addTo(map)
+    poiLayers.set(category, layer)
+  }
+
+  function clearPoiLayer(category) {
+    if (poiLayers.has(category)) {
+      poiLayers.get(category).remove()
+      poiLayers.delete(category)
+    }
+  }
+
+  return { init, applyResult, showPoiLayer, clearPoiLayer }
 }

@@ -14,6 +14,10 @@
     <button class="toggle-btn" @click="collapsed = !collapsed" :title="collapsed ? 'Apri chat' : 'Chiudi chat'">
       {{ collapsed ? '›' : '‹' }}
     </button>
+
+    <div class="poi-toolbar">
+      <PoiMenu @show="onPoiShow" @hide="onPoiHide" />
+    </div>
   </div>
 </template>
 
@@ -21,12 +25,21 @@
 import { ref } from 'vue'
 import ChatPanel from './components/ChatPanel.vue'
 import MapView from './components/MapView.vue'
+import PoiMenu from './components/PoiMenu.vue'
 
 const mapRef = ref(null)
 const collapsed = ref(false)
 
 function onResult(data) {
   mapRef.value?.applyResult(data)
+}
+
+function onPoiShow(category, items) {
+  mapRef.value?.showPoiLayer(category, items)
+}
+
+function onPoiHide(category) {
+  mapRef.value?.clearPoiLayer(category)
 }
 </script>
 
@@ -106,6 +119,15 @@ html, body, #app {
   border-left: 1px solid #e2e8f0;
   border-right: none;
   border-radius: 8px 0 0 8px;
+}
+
+/* Toolbar POI in basso al centro della mappa */
+.poi-toolbar {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 150;
 }
 
 /* Aurora Effect Behind Chat */
