@@ -159,7 +159,7 @@ Output atteso:
 File processati in: .../data/processed
 ```
 
-- [ ] **Step 3: Verifica visiva coordinate**
+- [x] **Step 3: Verifica visiva coordinate**
 
 ```bash
 python3 -c "
@@ -175,7 +175,7 @@ print('Lat:', coords[1], '(atteso ~46.0)')
 
 Entrambi i valori devono essere in range geografico italiano (lat ~45-47, lon ~10-12). Se le coordinate sono ancora ~660000/5100000, lo script non ha funzionato.
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add scripts/reproject.py data/processed/
