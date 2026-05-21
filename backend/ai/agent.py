@@ -220,8 +220,10 @@ async def run_agent(message: str, datasets: dict) -> dict:
     geo_state: dict = {"markers": []}
     last_response = None
 
+    print(f"[ollama] → '{message[:60]}…'")
     try:
-        for _ in range(5):
+        for i in range(5):
+            print(f"[ollama] iter {i+1} — attendo risposta…")
             response = await client.chat(
                 model="gemma4",
                 messages=messages,
@@ -229,8 +231,10 @@ async def run_agent(message: str, datasets: dict) -> dict:
             )
             last_response = response
             messages.append(response.message)
+            tool_calls = response.message.tool_calls or []
+            print(f"[ollama] iter {i+1} — tool_calls: {[t.function.name for t in tool_calls] or 'nessuno (risposta finale)'}")
 
-            if not response.message.tool_calls:
+            if not tool_calls:
                 break
 
             for tool_call in response.message.tool_calls:
