@@ -4,7 +4,7 @@
       v-for="cat in categories"
       :key="cat.id"
       :class="['poi-btn', { active: active.has(cat.id), loading: loadingCat === cat.id }]"
-      @click="toggle(cat.id)"
+      @click="toggle(cat)"
       :title="cat.label"
     >
       <span class="poi-icon">{{ cat.icon }}</span>
@@ -17,32 +17,45 @@
 import { ref, reactive } from 'vue'
 import axios from 'axios'
 
-const emit = defineEmits(['show', 'hide'])
+const emit = defineEmits(['show', 'hide', 'toggleCycling', 'toggleZones'])
 
 const categories = [
-  { id: 'bike_sharing', icon: '🚲', label: 'Bike Sharing' },
-  { id: 'car_sharing',  icon: '🚗', label: 'Car Sharing'  },
-  { id: 'stazioni',     icon: '🚉', label: 'Stazioni'     },
-  { id: 'taxi',         icon: '🚕', label: 'Taxi'         },
-  { id: 'parcheggi',    icon: '🅿️', label: 'Parcheggi'   },
-  { id: 'patti',        icon: '🏛️', label: 'Cultura'     },
+  { id: 'bike_sharing', icon: '🚲', label: 'Bike Sharing', api: true         },
+  { id: 'car_sharing',  icon: '🚗', label: 'Car Sharing',  api: true         },
+  { id: 'stazioni',     icon: '🚉', label: 'Stazioni',     api: true         },
+  { id: 'taxi',         icon: '🚕', label: 'Taxi',         api: true         },
+  { id: 'parcheggi',    icon: '🅿️', label: 'Parcheggi',   api: true         },
+  { id: 'patti',        icon: '🏛️', label: 'Cultura',     api: true         },
+  { id: 'ciclabili',    icon: '🛣️', label: 'Ciclabili',   api: false        },
+  { id: 'zone',         icon: '🗺️', label: 'Zone',         api: false        },
 ]
 
 const active = reactive(new Set())
 const loadingCat = ref(null)
 
-async function toggle(categoryId) {
-  if (active.has(categoryId)) {
-    active.delete(categoryId)
-    emit('hide', categoryId)
+async function toggle(cat) {
+  if (!cat.api) {
+    if (active.has(cat.id)) {
+      active.delete(cat.id)
+    } else {
+      active.add(cat.id)
+    }
+    if (cat.id === 'ciclabili') emit('toggleCycling')
+    if (cat.id === 'zone')      emit('toggleZones')
     return
   }
 
-  loadingCat.value = categoryId
+  if (active.has(cat.id)) {
+    active.delete(cat.id)
+    emit('hide', cat.id)
+    return
+  }
+
+  loadingCat.value = cat.id
   try {
-    const { data } = await axios.get(`/api/poi/${categoryId}`)
-    active.add(categoryId)
-    emit('show', categoryId, data.items)
+    const { data } = await axios.get(`/api/poi/${cat.id}`)
+    active.add(cat.id)
+    emit('show', cat.id, data.items, cat.icon)
   } catch (e) {
     console.error('Errore caricamento POI:', e)
   } finally {

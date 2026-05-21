@@ -9,13 +9,13 @@ import { ref, onMounted } from 'vue'
 import { useMap } from '../composables/useMap.js'
 
 const mapEl = ref(null)
-const { init, applyResult, showPoiLayer, clearPoiLayer } = useMap(mapEl)
+const { init, applyResult, showPoiLayer, clearPoiLayer, toggleCyclingLayer, toggleZonesLayer } = useMap(mapEl)
 
 onMounted(() => {
   setTimeout(init, 50)
 })
 
-defineExpose({ applyResult, showPoiLayer, clearPoiLayer })
+defineExpose({ applyResult, showPoiLayer, clearPoiLayer, toggleCyclingLayer, toggleZonesLayer })
 </script>
 
 <style scoped>

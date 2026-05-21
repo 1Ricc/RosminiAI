@@ -39,6 +39,25 @@ function makeColoredMarker(color) {
   })
 }
 
+function makeEmojiMarker(emoji) {
+  return L.divIcon({
+    html: `<div style="
+      width:32px;height:32px;
+      background:white;
+      border-radius:50%;
+      box-shadow:0 2px 8px rgba(0,0,0,0.2);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:16px;
+      line-height:1;
+    ">${emoji}</div>`,
+    className: '',
+    iconSize: [32, 32],
+    iconAnchor: [16, 16],
+  })
+}
+
 function getPoiLabel(item) {
   return item.fumetto || item.nome || item.via || item.descrizione || item.indirizzo || ''
 }
@@ -47,13 +66,17 @@ export function useMap(mapEl) {
   let map = null
   let markersLayer = null
   let routeLayer = null
+  let cyclingLayer = null
+  let cyclingVisible = false
+  let zonesLayer = null
+  let zonesVisible = false
   const poiLayers = new Map() // category → LayerGroup
 
   function init() {
     map = L.map(mapEl.value, { zoomControl: false, attributionControl: true })
-      .setView([45.8897, 11.0408], 14)
+      .setView([46.0707, 11.1193], 14)
 
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
       attribution: '© OpenStreetMap contributors © CARTO',
       maxZoom: 19,
     }).addTo(map)
@@ -68,9 +91,11 @@ export function useMap(mapEl) {
     try {
       const r = await fetch('/static/piste_ciclabili.geojson')
       const geojson = await r.json()
-      L.geoJSON(geojson, {
+      cyclingLayer = L.geoJSON(geojson, {
         style: { color: '#22c55e', weight: 2.5, opacity: 0.65 },
-      }).addTo(map)
+      })
+      // Le ciclabili partono nascoste, il bottone le attiva
+      cyclingVisible = false
     } catch (e) {
       console.warn('Piste ciclabili non caricate:', e)
     }
@@ -78,19 +103,43 @@ export function useMap(mapEl) {
     try {
       const r = await fetch('/static/zone_parcheggio.geojson')
       const geojson = await r.json()
-      L.geoJSON(geojson, {
+      zonesLayer = L.geoJSON(geojson, {
         style: (feat) => {
           const color = ZONE_COLORS[feat.properties.zona] ?? '#94a3b8'
-          return { fillColor: color, fillOpacity: 0.18, color, weight: 1.5 }
+          return { fillColor: color, fillOpacity: 0.25, color, weight: 1.5 }
         },
         onEachFeature: (feat, layer) => {
           layer.bindPopup(
             `<strong>${feat.properties.descrizione ?? 'Zona parcheggio'}</strong><br>Piano: ${feat.properties.pianopark ?? '-'}`
           )
         },
-      }).addTo(map)
+      })
+      // Parte nascosta, il bottone la attiva
+      zonesVisible = false
     } catch (e) {
       console.warn('Zone parcheggio non caricate:', e)
+    }
+  }
+
+  function toggleCyclingLayer() {
+    if (!cyclingLayer) return
+    if (cyclingVisible) {
+      cyclingLayer.remove()
+      cyclingVisible = false
+    } else {
+      cyclingLayer.addTo(map)
+      cyclingVisible = true
+    }
+  }
+
+  function toggleZonesLayer() {
+    if (!zonesLayer) return
+    if (zonesVisible) {
+      zonesLayer.remove()
+      zonesVisible = false
+    } else {
+      zonesLayer.addTo(map)
+      zonesVisible = true
     }
   }
 
@@ -124,20 +173,18 @@ export function useMap(mapEl) {
     }
   }
 
-  function showPoiLayer(category, items) {
-    // Rimuovi layer precedente della stessa categoria se esiste
+  function showPoiLayer(category, items, emoji) {
     if (poiLayers.has(category)) {
       poiLayers.get(category).remove()
       poiLayers.delete(category)
     }
 
-    const color = MARKER_COLORS[category] ?? '#6b7280'
     const layer = L.layerGroup()
 
     for (const item of items) {
       if (!item.lat || !item.lon) continue
       const label = getPoiLabel(item)
-      L.marker([item.lat, item.lon], { icon: makeColoredMarker(color) })
+      L.marker([item.lat, item.lon], { icon: makeEmojiMarker(emoji) })
         .bindPopup(`<strong>${label || category}</strong>`)
         .addTo(layer)
     }
@@ -153,5 +200,5 @@ export function useMap(mapEl) {
     }
   }
 
-  return { init, applyResult, showPoiLayer, clearPoiLayer }
+  return { init, applyResult, showPoiLayer, clearPoiLayer, toggleCyclingLayer, toggleZonesLayer }
 }

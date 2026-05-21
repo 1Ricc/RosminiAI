@@ -16,7 +16,7 @@
     </button>
 
     <div class="poi-toolbar">
-      <PoiMenu @show="onPoiShow" @hide="onPoiHide" />
+      <PoiMenu @show="onPoiShow" @hide="onPoiHide" @toggleCycling="onToggleCycling" @toggleZones="onToggleZones" />
     </div>
   </div>
 </template>
@@ -34,12 +34,20 @@ function onResult(data) {
   mapRef.value?.applyResult(data)
 }
 
-function onPoiShow(category, items) {
-  mapRef.value?.showPoiLayer(category, items)
+function onPoiShow(category, items, emoji) {
+  mapRef.value?.showPoiLayer(category, items, emoji)
 }
 
 function onPoiHide(category) {
   mapRef.value?.clearPoiLayer(category)
+}
+
+function onToggleCycling() {
+  mapRef.value?.toggleCyclingLayer()
+}
+
+function onToggleZones() {
+  mapRef.value?.toggleZonesLayer()
 }
 </script>
 
