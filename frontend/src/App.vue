@@ -5,9 +5,6 @@
     </div>
 
     <aside class="chat-overlay" :class="{ collapsed }">
-      <div class="aurora-container">
-        <div class="aurora-blob aurora-1"></div>
-      </div>
       <ChatPanel @result="onResult" />
     </aside>
 
@@ -138,35 +135,4 @@ html, body, #app {
   z-index: 150;
 }
 
-/* Aurora Effect Behind Chat */
-.aurora-container {
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
-  z-index: 0;
-  pointer-events: none;
-}
-
-.aurora-blob {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(120px);
-  opacity: 0.4;
-  animation: float 30s infinite ease-in-out alternate;
-}
-
-.aurora-1 {
-  width: 800px;
-  height: 800px;
-  background: #3b82f6; /* Blue */
-  top: -200px;
-  left: -200px;
-}
-
-@keyframes float {
-  0% { transform: translate(0, 0) scale(1); }
-  33% { transform: translate(80px, -60px) scale(1.05); }
-  66% { transform: translate(-40px, 80px) scale(0.95); }
-  100% { transform: translate(30px, 60px) scale(1.1); }
-}
 </style>

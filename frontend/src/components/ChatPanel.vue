@@ -1,7 +1,7 @@
 <template>
   <div class="chat-panel">
     <div class="chat-header">
-      <span class="logo">RosminiAI</span>
+      <span class="logo">🌱 RosminiAI</span>
     </div>
 
     <div class="messages" ref="messagesEl">
@@ -86,11 +86,11 @@ watch(messages, async () => {
   display: flex;
   flex-direction: column;
   height: 100%;
-  background: rgba(186, 230, 253, 0.25); /* Light blue / Sky tint */
+  background: rgba(255, 255, 255, 0.4);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border-right: 1px solid rgba(186, 230, 253, 0.4);
-  box-shadow: 4px 0 20px rgba(0, 0, 0, 0.05);
+  border-right: 1px solid rgba(226, 232, 240, 0.6);
+  box-shadow: 4px 0 16px rgba(0, 0, 0, 0.12);
   z-index: 10;
   position: relative;
   overflow: hidden;
@@ -101,6 +101,9 @@ watch(messages, async () => {
   border-bottom: 1px solid rgba(255, 255, 255, 0.4);
   background: transparent;
   flex-shrink: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .logo {
@@ -141,7 +144,7 @@ watch(messages, async () => {
 }
 
 .message.user .bubble {
-  background: #2563eb;
+  background: #16a34a;
   color: #ffffff;
   border-radius: 18px 18px 4px 18px;
 }
@@ -161,12 +164,12 @@ watch(messages, async () => {
 }
 
 .chip {
-  background: #eff6ff;
-  border: 1px solid #bfdbfe;
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
   border-radius: 6px;
   padding: 4px 8px;
   font-size: 11px;
-  color: #1d4ed8;
+  color: #15803d;
   display: flex;
   align-items: center;
   gap: 4px;
@@ -224,8 +227,8 @@ watch(messages, async () => {
 
 .suggestion-btn:hover {
   background: rgba(255, 255, 255, 0.9);
-  border-color: #2563eb;
-  color: #2563eb;
+  border-color: #16a34a;
+  color: #16a34a;
 }
 
 .input-row {
@@ -252,11 +255,11 @@ watch(messages, async () => {
 
 .chat-input:focus {
   background: #ffffff;
-  border-color: #2563eb;
+  border-color: #16a34a;
 }
 
 .send-btn {
-  background: #2563eb;
+  background: #16a34a;
   color: white;
   border: none;
   border-radius: 12px;
@@ -269,11 +272,11 @@ watch(messages, async () => {
   justify-content: center;
   flex-shrink: 0;
   transition: background 0.2s, transform 0.1s;
-  box-shadow: 0 2px 4px rgba(37, 99, 235, 0.3);
+  box-shadow: 0 2px 4px rgba(22, 163, 74, 0.3);
 }
 
 .send-btn:hover:not(:disabled) {
-  background: #1d4ed8;
+  background: #15803d;
   transform: translateY(-1px);
 }
 
