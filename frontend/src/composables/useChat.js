@@ -5,7 +5,7 @@ export function useChat(onResult) {
   const messages = ref([
     {
       role: 'ai',
-      text: 'Ciao! Sono Ask Rovereto 🗺️ Dimmi dove vuoi andare e ti aiuto a muoverti in città in modo sostenibile.',
+      text: 'Ciao! Sono RosminiAI 🌱 Dimmi dove vuoi andare e ti aiuto a muoverti in città in modo sostenibile.',
     },
   ])
   const loading = ref(false)
