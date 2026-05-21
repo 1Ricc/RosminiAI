@@ -13,18 +13,18 @@ Usa open data del Comune + Gemini AI + OpenRouteService.
 sudo pacman -S proj
 
 # 1. Crea il virtual environment Python (una volta sola)
-python3 -m venv .venv
-.venv/bin/pip install -r backend/requirements.txt
+python3 -m venv venv
+venv/bin/pip install -r backend/requirements.txt
 
 # 2. Copia le chiavi API
 cp backend/.env.example backend/.env
 # → inserisci GEMINI_API_KEY e ORS_API_KEY in backend/.env
 
 # 3. Riproietta i dati geografici (una volta sola)
-.venv/bin/python scripts/reproject.py
+venv/bin/python scripts/reproject.py
 
 # 4. Avvia il backend
-cd backend && ../.venv/bin/uvicorn main:app --reload --port 8000
+cd backend && ../venv/bin/uvicorn main:app --reload --port 8000
 
 # 5. Avvia il frontend (in un altro terminale)
 cd frontend && npm install && npm run dev
@@ -36,10 +36,10 @@ Apri http://localhost:5173
 
 ```bash
 # Test backend
-cd backend && ../.venv/bin/pytest tests/ -v
+cd backend && ../venv/bin/pytest tests/ -v
 
 # Aggiornare dipendenze Python
-.venv/bin/pip install -r backend/requirements.txt
+venv/bin/pip install -r backend/requirements.txt
 ```
 
 ## Stack
