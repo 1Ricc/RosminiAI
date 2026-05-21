@@ -144,36 +144,68 @@ def build_chips(distance_m: int, duration_s: int, profile: str) -> list[dict]:
     return chips
 
 
-async def get_fallback_response() -> dict:
-    """Risposta demo durante cooldown Gemini: percorso ciclabile Stazione FS → MART."""
-    origin = KNOWN_PLACES["stazione rovereto"]
-    destination = KNOWN_PLACES["mart"]
-    profile = "cycling-regular"
+async def get_fallback_response(message: str = "") -> dict:
+    """Risposta demo durante cooldown Gemini. Sceglie il percorso in base al messaggio."""
+    msg_lower = message.lower()
+    is_muse = "muse" in msg_lower or "museo delle scienze" in msg_lower
+
+    if is_muse:
+        origin = KNOWN_PLACES["stazione fs"]
+        destination = KNOWN_PLACES["muse"]
+        profile = "foot-walking"
+        origin_label = "Stazione FS Trento"
+        destination_label = "MUSE – Museo delle Scienze"
+        reply = (
+            "Ecco un percorso a piedi di esempio: Stazione FS Trento → MUSE.\n\n"
+            "1. Esci dalla Stazione Ferroviaria di Trento e dirigiti verso sud su Via Dogana.\n"
+            "2. Prosegui lungo Viale Verona.\n"
+            "3. Svolta a destra su Via Luigi Negrelli.\n"
+            "4. Arrivi al MUSE – Museo delle Scienze di Trento.\n\n"
+            "⚠️ Il servizio AI è temporaneamente in pausa (quota esaurita). "
+            "Questa è una risposta di esempio — riprova tra qualche minuto."
+        )
+        hardcoded_distance_m = 2000
+        hardcoded_duration_s = 1500
+    else:
+        origin = KNOWN_PLACES["stazione rovereto"]
+        destination = KNOWN_PLACES["mart"]
+        profile = "cycling-regular"
+        origin_label = "Stazione FS Rovereto"
+        destination_label = "MART"
+        reply = (
+            "Ecco un percorso ciclabile di esempio: Stazione FS Rovereto → MART.\n\n"
+            "1. Parti dalla Stazione Ferroviaria di Rovereto in bici.\n"
+            "2. Imbocca Corso Rosmini verso il centro.\n"
+            "3. Svolta su Corso Bettini.\n"
+            "4. Arrivi al MART – Museo di Arte Moderna e Contemporanea di Rovereto.\n\n"
+            "⚠️ Il servizio AI è temporaneamente in pausa (quota esaurita). "
+            "Questa è una risposta di esempio — riprova tra qualche minuto."
+        )
+        hardcoded_distance_m = 1200
+        hardcoded_duration_s = 360
 
     markers = [
-        {"lat": origin[0],      "lon": origin[1],      "type": "origin",      "label": "Stazione FS Rovereto", "distance_m": None},
-        {"lat": destination[0], "lon": destination[1], "type": "destination", "label": "MART",                 "distance_m": None},
+        {"lat": origin[0],      "lon": origin[1],      "type": "origin",      "label": origin_label,      "distance_m": None},
+        {"lat": destination[0], "lon": destination[1], "type": "destination", "label": destination_label, "distance_m": None},
     ]
-    reply = (
-        "Ecco un percorso ciclabile di esempio: Stazione FS Rovereto → MART.\n\n"
-        "1. Parti dalla Stazione Ferroviaria di Rovereto in bici.\n"
-        "2. Imbocca Corso Rosmini verso il centro.\n"
-        "3. Svolta su Corso Bettini.\n"
-        "4. Arrivi al MART – Museo di Arte Moderna e Contemporanea di Rovereto.\n\n"
-        "⚠️ Il servizio AI è temporaneamente in pausa (quota esaurita). "
-        "Questa è una risposta di esempio — riprova tra qualche minuto."
-    )
 
     try:
         route_data = await get_route(origin, destination, profile)
         return {
-            "reply":   reply,
-            "markers": markers,
-            "route":   route_data["geojson"],
-            "chips":   build_chips(route_data["distance_m"], route_data["duration_s"], profile),
+            "reply":       reply,
+            "markers":     markers,
+            "route":       route_data["geojson"],
+            "chips":       build_chips(route_data["distance_m"], route_data["duration_s"], profile),
+            "is_fallback": True,
         }
     except Exception:
-        return {"reply": reply, "markers": markers, "route": None, "chips": []}
+        return {
+            "reply":       reply,
+            "markers":     markers,
+            "route":       None,
+            "chips":       build_chips(hardcoded_distance_m, hardcoded_duration_s, profile),
+            "is_fallback": True,
+        }
 
 
 async def run_agent(message: str, datasets: dict) -> dict:
@@ -223,7 +255,7 @@ async def run_agent(message: str, datasets: dict) -> dict:
             )
 
     except (ResourceExhausted, GoogleAPIError, Exception):
-        return await get_fallback_response()
+        return await get_fallback_response(message)
 
     reply = "".join(
         part.text for part in response.parts if hasattr(part, "text") and part.text
