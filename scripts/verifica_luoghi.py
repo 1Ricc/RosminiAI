@@ -4,6 +4,7 @@ Apre ogni luogo su OSM, chiede conferma, raccoglie correzioni e aggiorna il file
 """
 
 import json
+import platform
 import subprocess
 from pathlib import Path
 
@@ -25,7 +26,8 @@ def main():
         nome = p.get("nome", "?")
         url = f"https://www.openstreetmap.org/?mlat={lat}&mlon={lon}&zoom=17"
 
-        subprocess.Popen(["xdg-open", url])
+        opener = "open" if platform.system() == "Darwin" else "xdg-open"
+        subprocess.Popen([opener, url])
         risposta = input(f"  {nome:<40} corretto? [Invio = sì / n = no]: ").strip().lower()
 
         if risposta == "n":
