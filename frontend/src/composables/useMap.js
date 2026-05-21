@@ -183,9 +183,13 @@ export function useMap(mapEl) {
 
     for (const item of items) {
       if (!item.lat || !item.lon) continue
-      const label = getPoiLabel(item)
+      const label = item.nome_completo || getPoiLabel(item) || category
+      const extra = [
+        item.descrizione ? `<p style="margin:4px 0 0;font-size:11px;color:#64748b">${item.descrizione}</p>` : '',
+        item.citta ? `<p style="margin:2px 0 0;font-size:10px;color:#94a3b8">${item.citta}</p>` : '',
+      ].join('')
       L.marker([item.lat, item.lon], { icon: makeEmojiMarker(emoji) })
-        .bindPopup(`<strong>${label || category}</strong>`)
+        .bindPopup(`<strong style="font-size:13px">${label}</strong>${extra}`, { maxWidth: 220 })
         .addTo(layer)
     }
 
