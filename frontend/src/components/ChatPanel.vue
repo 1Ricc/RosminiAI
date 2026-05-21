@@ -11,7 +11,7 @@
         :class="['message', msg.role]"
       >
         <div class="bubble">{{ msg.text }}</div>
-        <div v-if="msg.is_fallback" class="fallback-notice">
+        <div v-if="msg.role === 'ai' && msg.is_fallback" class="fallback-notice">
           ⚠️ Risposta di esempio – servizio AI momentaneamente non disponibile
         </div>
         <div v-if="msg.chips?.length" class="chips">

@@ -270,8 +270,9 @@ async def run_agent(message: str, datasets: dict) -> dict:
         )
 
     return {
-        "reply":   reply,
-        "markers": geo_state.get("markers", []),
-        "route":   geo_state.get("route"),
-        "chips":   chips,
+        "reply":       reply,
+        "markers":     geo_state.get("markers", []),
+        "route":       geo_state.get("route"),
+        "chips":       chips,
+        "is_fallback": False,
     }
