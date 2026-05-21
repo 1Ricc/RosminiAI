@@ -1,4 +1,3 @@
-# PLACEHOLDER — verrà implementato in Task 9
 from fastapi import APIRouter
 
 router = APIRouter()
@@ -6,4 +5,5 @@ router = APIRouter()
 
 @router.post("/chat")
 async def chat():
-    return {"reply": "Placeholder — AI agent non ancora implementato.", "markers": [], "route": None, "chips": []}
+    # stub — implementazione completa nel Task 9
+    return {"reply": "Coming soon", "markers": [], "route": None, "chips": []}
