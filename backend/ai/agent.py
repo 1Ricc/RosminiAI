@@ -3,7 +3,7 @@ from typing import Any
 
 import httpx
 import google.generativeai as genai
-from google.api_core.exceptions import ResourceExhausted
+from google.api_core.exceptions import GoogleAPIError, ResourceExhausted
 from dotenv import load_dotenv
 
 from ai.prompt import SYSTEM_PROMPT, KNOWN_PLACES
@@ -40,21 +40,37 @@ async def execute_tool(
 
     if name == "geocode_location":
         place = args["place_name"].lower().strip()
+        lat, lon = None, None
         if place in KNOWN_PLACES:
             lat, lon = KNOWN_PLACES[place]
-            return {"lat": lat, "lon": lon, "found": True}
-        # Fallback Nominatim
-        async with httpx.AsyncClient(timeout=5.0) as client:
-            r = await client.get(
-                "https://nominatim.openstreetmap.org/search",
-                params={"q": f"{args['place_name']} Trento Italia", "format": "json", "limit": 1},
-                headers={"User-Agent": "AskRovereto/1.0"},
-            )
-            results = r.json()
-        if results:
-            lat, lon = float(results[0]["lat"]), float(results[0]["lon"])
-            return {"lat": lat, "lon": lon, "found": True}
-        return {"lat": None, "lon": None, "found": False, "error": "Luogo non trovato"}
+        else:
+            # Fallback Nominatim
+            async with httpx.AsyncClient(timeout=5.0) as client:
+                r = await client.get(
+                    "https://nominatim.openstreetmap.org/search",
+                    params={"q": f"{args['place_name']} Trento Italia", "format": "json", "limit": 1},
+                    headers={"User-Agent": "AskRovereto/1.0"},
+                )
+                results = r.json()
+            if results:
+                lat, lon = float(results[0]["lat"]), float(results[0]["lon"])
+
+        if lat is None:
+            return {"lat": None, "lon": None, "found": False, "error": "Luogo non trovato"}
+
+        # Prima geocodifica = origin, seconda = destination, ulteriori = waypoint
+        count = geo_state.get("_geocode_count", 0)
+        geo_state["_geocode_count"] = count + 1
+        marker_type = "origin" if count == 0 else "destination" if count == 1 else "waypoint"
+
+        geo_state.setdefault("markers", []).append({
+            "lat":        lat,
+            "lon":        lon,
+            "type":       marker_type,
+            "label":      args["place_name"],
+            "distance_m": None,
+        })
+        return {"lat": lat, "lon": lon, "found": True}
 
     if name == "find_nearest_poi":
         poi_type = args["poi_type"]
@@ -128,6 +144,38 @@ def build_chips(distance_m: int, duration_s: int, profile: str) -> list[dict]:
     return chips
 
 
+async def get_fallback_response() -> dict:
+    """Risposta demo durante cooldown Gemini: percorso ciclabile Stazione FS → MART."""
+    origin = KNOWN_PLACES["stazione rovereto"]
+    destination = KNOWN_PLACES["mart"]
+    profile = "cycling-regular"
+
+    markers = [
+        {"lat": origin[0],      "lon": origin[1],      "type": "origin",      "label": "Stazione FS Rovereto", "distance_m": None},
+        {"lat": destination[0], "lon": destination[1], "type": "destination", "label": "MART",                 "distance_m": None},
+    ]
+    reply = (
+        "Ecco un percorso ciclabile di esempio: Stazione FS Rovereto → MART.\n\n"
+        "1. Parti dalla Stazione Ferroviaria di Rovereto in bici.\n"
+        "2. Imbocca Corso Rosmini verso il centro.\n"
+        "3. Svolta su Corso Bettini.\n"
+        "4. Arrivi al MART – Museo di Arte Moderna e Contemporanea di Rovereto.\n\n"
+        "⚠️ Il servizio AI è temporaneamente in pausa (quota esaurita). "
+        "Questa è una risposta di esempio — riprova tra qualche minuto."
+    )
+
+    try:
+        route_data = await get_route(origin, destination, profile)
+        return {
+            "reply":   reply,
+            "markers": markers,
+            "route":   route_data["geojson"],
+            "chips":   build_chips(route_data["distance_m"], route_data["duration_s"], profile),
+        }
+    except Exception:
+        return {"reply": reply, "markers": markers, "route": None, "chips": []}
+
+
 async def run_agent(message: str, datasets: dict) -> dict:
     """
     Esegue il loop Gemini function calling.
@@ -144,42 +192,38 @@ async def run_agent(message: str, datasets: dict) -> dict:
     chat = model.start_chat()
     try:
         response = chat.send_message(message)
-    except ResourceExhausted:
-        return {
-            "reply": "Servizio temporaneamente non disponibile: quota API esaurita. Riprova tra qualche minuto.",
-            "markers": [],
-            "route": None,
-            "chips": [],
-        }
-    geo_state: dict = {"markers": []}
+        geo_state: dict = {"markers": []}
 
-    # Loop tool calling — max 5 iterazioni per sicurezza
-    for _ in range(5):
-        fn_calls = [
-            part.function_call
-            for part in response.parts
-            if hasattr(part, "function_call")
-            and part.function_call
-            and part.function_call.name
-        ]
-        if not fn_calls:
-            break
+        # Loop tool calling — max 5 iterazioni per sicurezza
+        for _ in range(5):
+            fn_calls = [
+                part.function_call
+                for part in response.parts
+                if hasattr(part, "function_call")
+                and part.function_call
+                and part.function_call.name
+            ]
+            if not fn_calls:
+                break
 
-        tool_responses = []
-        for fc in fn_calls:
-            result = await execute_tool(fc.name, dict(fc.args), datasets, geo_state)
-            tool_responses.append(
-                genai.protos.Part(
-                    function_response=genai.protos.FunctionResponse(
-                        name=fc.name,
-                        response={"result": result},
+            tool_responses = []
+            for fc in fn_calls:
+                result = await execute_tool(fc.name, dict(fc.args), datasets, geo_state)
+                tool_responses.append(
+                    genai.protos.Part(
+                        function_response=genai.protos.FunctionResponse(
+                            name=fc.name,
+                            response={"result": result},
+                        )
                     )
                 )
+
+            response = chat.send_message(
+                genai.protos.Content(parts=tool_responses)
             )
 
-        response = chat.send_message(
-            genai.protos.Content(parts=tool_responses)
-        )
+    except (ResourceExhausted, GoogleAPIError, Exception):
+        return await get_fallback_response()
 
     reply = "".join(
         part.text for part in response.parts if hasattr(part, "text") and part.text

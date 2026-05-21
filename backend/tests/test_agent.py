@@ -7,7 +7,7 @@ from ai.agent import execute_tool, build_chips
 @pytest.mark.asyncio
 async def test_execute_tool_geocode_known_place():
     datasets = {}
-    result = await execute_tool("geocode_location", {"place_name": "mart"}, datasets, {})
+    result = await execute_tool("geocode_location", {"place_name": "stazione trento"}, datasets, {})
     assert result["found"] is True
     assert 46.05 < result["lat"] < 46.09
     assert 11.10 < result["lon"] < 11.15
