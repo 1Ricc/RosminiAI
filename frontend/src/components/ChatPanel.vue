@@ -11,6 +11,9 @@
         :class="['message', msg.role]"
       >
         <div class="bubble">{{ msg.text }}</div>
+        <div v-if="msg.is_fallback" class="fallback-notice">
+          ⚠️ Risposta di esempio – servizio AI momentaneamente non disponibile
+        </div>
         <div v-if="msg.chips?.length" class="chips">
           <span v-for="chip in msg.chips" :key="chip.label" class="chip">
             {{ chip.icon }} <strong>{{ chip.value }}</strong>
@@ -62,6 +65,7 @@ const suggestions = [
   'Stazione FS → MART in bici',
   'Parcheggi vicino al Duomo',
   'Come raggiungere il MUSE a piedi?',
+  'da FS - Trento a MUSE - Museo delle scienze di Trento',
 ]
 
 const { messages, loading, sendMessage } = useChat((data) => emit('result', data))
@@ -177,6 +181,13 @@ watch(messages, async () => {
 
 .chip small {
   opacity: 0.7;
+}
+
+.fallback-notice {
+  font-size: 11px;
+  color: #b45309;
+  margin-top: 4px;
+  max-width: 85%;
 }
 
 /* Typing indicator */
