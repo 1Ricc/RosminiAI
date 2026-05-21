@@ -3,6 +3,7 @@ from typing import Any
 
 import httpx
 import google.generativeai as genai
+from google.api_core.exceptions import ResourceExhausted
 from dotenv import load_dotenv
 
 from ai.prompt import SYSTEM_PROMPT, KNOWN_PLACES
@@ -141,7 +142,15 @@ async def run_agent(message: str, datasets: dict) -> dict:
     )
 
     chat = model.start_chat()
-    response = chat.send_message(message)
+    try:
+        response = chat.send_message(message)
+    except ResourceExhausted:
+        return {
+            "reply": "Servizio temporaneamente non disponibile: quota API esaurita. Riprova tra qualche minuto.",
+            "markers": [],
+            "route": None,
+            "chips": [],
+        }
     geo_state: dict = {"markers": []}
 
     # Loop tool calling — max 5 iterazioni per sicurezza
