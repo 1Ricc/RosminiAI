@@ -1,73 +1,107 @@
-# Ask Rovereto 🗺️
+# Ask Rovereto
 
-Assistente AI con chat + mappa per la mobilità urbana di Trento.
-Usa open data del Comune + Gemini AI + OpenRouteService.
+Assistente AI per la mobilità urbana di Trento e Rovereto. Digita una domanda in linguaggio naturale ("Come arrivo al MART dalla stazione?", "Dove posso parcheggiare vicino al Duomo?") e ottieni indicazioni, percorsi e informazioni sui punti di interesse — il tutto su una mappa interattiva.
 
-## Setup rapido
+![stack](https://img.shields.io/badge/backend-FastAPI-009688?logo=fastapi) ![stack](https://img.shields.io/badge/frontend-Vue%203-42b883?logo=vue.js) ![stack](https://img.shields.io/badge/AI-Gemma%204%20%28Ollama%29-FF6F00) ![license](https://img.shields.io/badge/license-MIT-blue)
 
-> **Arch Linux / sistemi con Python externally-managed:** `pip install` globale non funziona.
-> Usa il venv come descritto sotto.
+---
+
+## Funzionalità
+
+- **Chat in linguaggio naturale** — chiedi indicazioni, orari, POI in italiano
+- **Mappa interattiva** — percorsi a piedi, in bici o in auto disegnati in tempo reale
+- **Open data del Trentino** — piste ciclabili, bike/car sharing, parcheggi, stazioni, taxi, luoghi di interesse
+- **Routing preciso** — powered by OpenRouteService
+- **Guardrail geografici** — l'AI risponde solo a domande su Trento e Rovereto
+
+## Stack
+
+| Layer | Tecnologia |
+|-------|-----------|
+| Frontend | Vue 3 + Vite + Leaflet |
+| Backend | FastAPI (Python 3.11+) |
+| AI | Gemma 4 in locale — function calling via [Ollama](https://ollama.com) |
+| Routing | OpenRouteService API |
+| Dati | Open data Comune di Trento (GeoJSON, EPSG:25832 → WGS84) |
+
+## Prerequisiti
+
+- Python 3.11+
+- Node.js 18+
+- Libreria di sistema `proj` (`sudo apt install libproj-dev` / `sudo pacman -S proj` / `brew install proj`)
+- [Ollama](https://ollama.com) installato e in esecuzione con il modello Gemma 4:
+  ```bash
+  ollama pull gemma4
+  ```
+- Chiave API [OpenRouteService](https://openrouteservice.org/)
+
+## Installazione
 
 ```bash
-# 0. Installa dipendenze di sistema (Arch Linux)
-sudo pacman -S proj
+# 1. Clona il repository
+git clone https://github.com/CassandraRosmini/ask-rovereto.git
+cd ask-rovereto
 
-# 1. Crea il virtual environment Python (una volta sola)
+# 2. Crea il virtual environment Python
 python3 -m venv venv
 venv/bin/pip install -r backend/requirements.txt
 
-# 2. Copia le chiavi API
+# 3. Configura le chiavi API
 cp backend/.env.example backend/.env
-# → inserisci GEMINI_API_KEY e ORS_API_KEY in backend/.env
+# → apri backend/.env e inserisci GEMINI_API_KEY e ORS_API_KEY
 
-# 3. Riproietta i dati geografici (una volta sola)
+# 4. Riproietta i dati geografici (una volta sola)
 venv/bin/python scripts/reproject.py
 
-# 4. Avvia il backend
+# 5. Avvia il backend
 cd backend && ../venv/bin/uvicorn main:app --reload --port 8000
 
-# 5. Avvia il frontend (in un altro terminale)
+# 6. Avvia il frontend (in un altro terminale)
 cd frontend && npm install && npm run dev
 ```
 
-Apri http://localhost:5173
+Apri **http://localhost:5173**
 
-### Comandi utili
+## Variabili d'ambiente
+
+Copia `backend/.env.example` in `backend/.env` e compila:
+
+| Variabile | Descrizione |
+|-----------|-------------|
+| `ORS_API_KEY` | OpenRouteService API key |
+| `DATA_DIR` | Percorso ai GeoJSON processati (default: `../data/processed`) |
+
+## Struttura del progetto
+
+```
+backend/
+  ai/         # Agente Gemini con function calling
+  geo/        # Caricamento e riproiezione GeoJSON
+  routers/    # Endpoint FastAPI (chat, POI)
+  tests/      # Test unitari (pytest)
+frontend/
+  src/        # Componenti Vue 3, composables, Leaflet
+data/
+  *.geojson         # Dati grezzi EPSG:25832 (Comune di Trento)
+  processed/        # Output WGS84 generato da reproject.py
+scripts/
+  reproject.py      # Conversione coordinate EPSG:25832 → WGS84
+```
+
+## Dati
+
+I dataset geografici provengono dal portale open data del **Comune di Trento** e sono rilasciati con licenza aperta. Includono: piste ciclabili, stazioni bike/car sharing, parcheggi, fermate taxi, luoghi di interesse, stazioni ferroviarie.
+
+## Sviluppo
 
 ```bash
 # Test backend
 cd backend && ../venv/bin/pytest tests/ -v
 
-# Aggiornare dipendenze Python
-venv/bin/pip install -r backend/requirements.txt
+# Linting (ruff)
+cd backend && ../venv/bin/ruff check .
 ```
 
-## Stack
+## Licenza
 
-- **Frontend**: Vue 3 + Vite + Leaflet
-- **Backend**: FastAPI (Python)
-- **AI**: Gemini 2.0 Flash (function calling)
-- **Routing**: OpenRouteService API
-- **Dati**: Open data Comune di Trento (EPSG:25832 → WGS84)
-
-## Struttura
-
-```
-backend/    → FastAPI, AI agent, geo utils
-frontend/   → Vue 3, Leaflet map, chat UI
-data/       → GeoJSON open data
-scripts/    → preprocessing
-docs/       → spec e piano di implementazione
-```
-
-## Piano implementazione
-
-Vedi `docs/superpowers/plans/2026-05-21-ask-rovereto.md`
-
-## Divisione lavoro
-
-| Dev | Branch | Tasks |
-|-----|--------|-------|
-| A — Frontend | `dev/frontend` | Task 10-13 (Vue, Leaflet, chat UI) |
-| B — Backend/AI | `dev/backend` | Task 2, 6-9 (FastAPI, Gemini, ORS) |
-| C — Data/Geo | `dev/data` | Task 1, 3-5 (riproiezione, loader, nearest) |
+[MIT](LICENSE)
