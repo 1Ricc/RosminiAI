@@ -2,6 +2,10 @@
 
 Assistente AI per la mobilità urbana di Trento e Rovereto. Digita una domanda in linguaggio naturale ("Come arrivo al MART dalla stazione?", "Dove posso parcheggiare vicino al Duomo?") e ottieni indicazioni, percorsi e informazioni sui punti di interesse — il tutto su una mappa interattiva.
 
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/2a15a77c-0b00-467e-b3b1-e734d1991b0e" />
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/4d9f9c84-dd11-4572-8a61-88c93127d4f0" />
+
+
 ![stack](https://img.shields.io/badge/backend-FastAPI-009688?logo=fastapi) ![stack](https://img.shields.io/badge/frontend-Vue%203-42b883?logo=vue.js) ![stack](https://img.shields.io/badge/AI-Gemma%204%20%28Ollama%29-FF6F00) ![license](https://img.shields.io/badge/license-MIT-blue)
 
 ---
