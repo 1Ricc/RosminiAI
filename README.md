@@ -1,4 +1,4 @@
-# Ask Rovereto
+# RosminiAI
 
 Assistente AI per la mobilità urbana di Trento e Rovereto. Digita una domanda in linguaggio naturale ("Come arrivo al MART dalla stazione?", "Dove posso parcheggiare vicino al Duomo?") e ottieni indicazioni, percorsi e informazioni sui punti di interesse — il tutto su una mappa interattiva.
 
